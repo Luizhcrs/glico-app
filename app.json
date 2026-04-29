@@ -7,14 +7,22 @@
     "scheme": "glico",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "ios": { "supportsTablet": false, "bundleIdentifier": "com.luizhcrs.glico" },
-    "android": { "package": "com.luizhcrs.glico" },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.luizhcrs.glico"
+    },
+    "android": {
+      "package": "com.luizhcrs.glico"
+    },
     "plugins": [
       "expo-router",
       "expo-notifications",
       "expo-secure-store",
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-font"
     ],
-    "experiments": { "typedRoutes": true }
+    "experiments": {
+      "typedRoutes": true
+    }
   }
 }
