@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "Glico",
+    "slug": "glico",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "glico",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": { "supportsTablet": false, "bundleIdentifier": "com.luizhcrs.glico" },
+    "android": { "package": "com.luizhcrs.glico" },
+    "plugins": [
+      "expo-router",
+      "expo-notifications",
+      "expo-secure-store",
+      "expo-sqlite"
+    ],
+    "experiments": { "typedRoutes": true }
+  }
+}
