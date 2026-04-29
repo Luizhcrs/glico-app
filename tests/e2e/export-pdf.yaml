@@ -1,0 +1,11 @@
+# tests/e2e/export-pdf.yaml
+appId: com.luizhcrs.glico
+---
+- launchApp
+- tapOn:
+    text: "Tendência"
+    optional: true
+- tapOn: "Exportar PDF"
+- assertVisible:
+    text: "Compartilhar"
+    optional: true

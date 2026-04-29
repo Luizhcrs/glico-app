@@ -1,0 +1,15 @@
+# tests/e2e/hypo-flow.yaml
+appId: com.luizhcrs.glico
+---
+- launchApp
+- tapOn: "Hipo"
+- assertVisible: "Episódio de hipo"
+- tapOn: "5"
+- tapOn: "8"
+- tapOn: "Tremor"
+- tapOn: "Suor"
+- tapOn: "Açúcar 15g"
+- tapOn: "Salvar e definir lembrete 15min"
+- assertVisible: "Lembrete em 15 minutos"
+- tapOn: "OK"
+- assertVisible: "Olá"

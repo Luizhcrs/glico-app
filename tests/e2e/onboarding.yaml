@@ -1,0 +1,13 @@
+# tests/e2e/onboarding.yaml
+appId: com.luizhcrs.glico
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Bem-vinda ao Glico"
+- tapOn: "Começar"
+- inputText: "Maria"
+- tapOn: "Continuar"
+- assertVisible: "Seus alvos"
+- tapOn: "Próximo"
+- tapOn: "Permitir lembretes e começar"
+- assertVisible: "Olá, Maria"

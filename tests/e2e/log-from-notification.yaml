@@ -1,0 +1,16 @@
+# tests/e2e/log-from-notification.yaml
+# This flow requires a triggered local push. Maestro Cloud or manual trigger:
+# 1. Run this device with Glico open.
+# 2. Wait for next reminder OR call:
+#    npx maestro test --include-tags=manual-push
+# 3. Tap notification body (not the bell).
+# 4. Assert log screen opens with pre-filled context.
+appId: com.luizhcrs.glico
+tags: [manual-push]
+---
+- launchApp
+- assertVisible: "Olá"
+# Manual: tap notification on system tray.
+- assertVisible:
+    text: "Nova medição"
+    timeout: 60000
