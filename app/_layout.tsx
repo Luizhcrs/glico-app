@@ -1,13 +1,25 @@
 // app/_layout.tsx
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
-import { Stack } from 'expo-router';
-import { openDb } from '@/db/client';
+import { Stack, useRouter, usePathname } from 'expo-router';
+import { openDb, getDbSync } from '@/db/client';
+import { settingsRepo } from '@/domain/settings';
 import { theme } from '@/ui/theme';
 
 export default function RootLayout() {
   const [ready, setReady] = useState(false);
-  useEffect(() => { openDb().then(() => setReady(true)); }, []);
+  const router = useRouter();
+  const pathname = usePathname();
+  useEffect(() => {
+    (async () => {
+      await openDb();
+      const s = settingsRepo(getDbSync()).get();
+      setReady(true);
+      if (!s.displayName && !pathname?.startsWith('/onboarding')) {
+        router.replace('/onboarding/welcome');
+      }
+    })();
+  }, [router, pathname]);
   if (!ready) {
     return <View style={{ flex:1, alignItems:'center', justifyContent:'center', backgroundColor: theme.colors.bg }}>
       <ActivityIndicator color={theme.colors.accent} />
