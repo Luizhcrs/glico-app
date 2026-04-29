@@ -27,6 +27,7 @@ export default function ProfileScreen() {
       <Row label="Configurar lembretes" value="›" onPress={() => router.push('/profile/reminders')} />
 
       <Text style={styles.section}>Dados</Text>
+      <Row label={s.appLockEnabled ? 'Bloqueio: ativo' : 'Bloqueio do app'} value="›" onPress={() => router.push('/profile/lock')} />
       <Row label="Sobre & privacidade" value="›" onPress={() => router.push('/profile/about')} />
     </ScrollView>
   );
