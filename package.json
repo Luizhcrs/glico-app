@@ -1,7 +1,7 @@
 {
   "name": "glico",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@shopify/react-native-skia": "2.2.12",
     "date-fns": "^4.1.0",
     "expo": "~54.0.33",
     "expo-file-system": "~19.0.22",
@@ -23,7 +24,9 @@
     "expo-status-bar": "~3.0.9",
     "react": "19.1.0",
     "react-native": "0.81.5",
+    "react-native-gesture-handler": "~2.28.0",
     "react-native-quick-crypto": "^1.1.1",
+    "react-native-reanimated": "~4.1.1",
     "react-native-svg": "15.12.1",
     "victory-native": "^41.20.2"
   },
