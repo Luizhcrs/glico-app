@@ -10,11 +10,10 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
-    "@radix-ui/react-tabs": "^1.1.13",
-    "@react-navigation/drawer": "^7.9.9",
     "@shopify/react-native-skia": "2.2.12",
     "date-fns": "^4.1.0",
     "expo": "~54.0.33",
+    "expo-dev-client": "^55.0.28",
     "expo-file-system": "~19.0.22",
     "expo-font": "~14.0.11",
     "expo-haptics": "~15.0.8",
