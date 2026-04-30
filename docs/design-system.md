@@ -11,8 +11,6 @@ Glico é um app de monitoramento clínico **íntimo** — usado 4 a 6 vezes ao d
 
 **Palavras-âncora:** sereno, doméstico, confiável, leve, atemporal.
 
-**Anti-âncoras:** clínico-frio, alarmante, infantil, "fitness app", gamificado, festivo.
-
 **Como isso vira UI:**
 
 - Cores terrosas e dessaturadas, nunca neon nem alta saturação
@@ -32,7 +30,7 @@ Glico é um app de monitoramento clínico **íntimo** — usado 4 a 6 vezes ao d
 Quadrado arredondado verde sálvia (gradient sutil de #6b8c6b para #4f6e4f), com:
 
 - "g" minúsculo em peso 200, branco-bege #f5f3ed, alinhado à baseline
-- Drop accent (gota arredondada) bege #f5f3ed no canto superior direito — referência visual sutil ao caráter clínico do app sem virar ícone-de-hospital
+- Drop accent (gota arredondada) bege #f5f3ed no canto superior direito — referência visual sutil ao contexto de saúde, sem reforçar estética clínica pesada
 
 **Raio:** 232 / 1024 ≈ 22.6% (segue Apple Squircle / iOS adaptive)
 **Drop:** 76px diâmetro, posição (720, 240), opacity 92%
@@ -256,7 +254,7 @@ Pacote: `lucide-react-native`
 - Overlay `rgba(45,58,45,0.55)` (verde escuro translúcido)
 - Card `surface` com radius 20
 - Bottom sheet com handle bar (40×4 cardBg) no topo
-- Animation: linear timing 180ms (overlay) + ease-out 240ms (sheet) — nunca spring exagerado
+- Animation: linear timing 180ms (overlay) + ease-out 240ms (sheet); springs sempre com damping alto pra evitar bounces visíveis
 
 ### Inputs
 - Bg `surface`, border `border` 1px, radius `md`
@@ -291,7 +289,7 @@ Pacote: `lucide-react-native`
 - Confetti, balões, animação de check em V
 - BigNumber count-up (foi removido — distrai)
 - Spring com bounce em entrada de cards
-- Stagger em listas (mata percepção de "tela carregada", parece performático)
+- Stagger em listas (atrasa percepção de "tela carregada")
 - Lottie animado (cancela peso visual)
 
 ---
@@ -300,7 +298,7 @@ Pacote: `lucide-react-native`
 
 ### Voz
 - 1ª pessoa do singular (paciente fala consigo) ou imperativo gentil ("Mede de novo")
-- PT-BR informal, sem nerdices nem termos técnicos sozinhos
+- PT-BR informal, claro, com termos técnicos sempre acompanhados de sinônimo lay
 - Termos clínicos sempre acompanhados de sinônimo lay: "Lenta (basal)", "Rápida (bolus)"
 - Avoid: "Você", "Por favor", "Atenção!", "Erro:", emoji
 

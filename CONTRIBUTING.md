@@ -83,7 +83,7 @@ Lint não está configurado ainda — fica pra v0.2.
 
 Da [`docs/design-system.md`](./docs/design-system.md):
 
-- Sereno > performático
+- Sereno e funcional
 - Funcional > decorativo
 - Lay terms > jargão clínico isolado
 - Cor é informação, não enfeite

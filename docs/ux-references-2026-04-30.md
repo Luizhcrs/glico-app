@@ -42,7 +42,7 @@
 
 **Padrão específico:** Apple Design Award winner. Tela principal mostra cada hábito como um círculo preenchido: vazio = não feito hoje, colorido = feito. Streak counter (dias consecutivos) aparece como número badge abaixo do círculo. Empty state é o próprio círculo cinza — não tem copy de "você não fez nada", tem apenas o convite visual de preencher. A celebração ao completar o dia é mínima: o círculo "sela" com micro-bounce e a cor satura.
 
-**Por que funciona no Glico:** T1 diabetes requer hábito diário compulsório. A lógica do Streaks de "círculo vazio = incompleto" traduz perfeitamente para "dia sem medições registradas". No Glico, um indicador de streak de dias com ≥ 3 medições na tela de perfil criaria motivação intrínseca sem gamificação explodida. A celebração sutil (bounce) é certa para uma usuária adulta — sem confetti excessivo que infantilizaria.
+**Por que funciona no Glico:** T1 diabetes requer hábito diário. A lógica do Streaks de "círculo vazio = incompleto" traduz para "dia sem medições registradas". No Glico, um indicador de streak de dias com ≥ 3 medições na tela de perfil cria motivação intrínseca de forma discreta. A celebração sutil (bounce) é adequada para usuária adulta com a manutenção de uma condição crônica.
 
 **Esforço em RN:** baixo. Streak counter é lógica de SQL simples. Animação de "seal" é `Animated.spring`. Tempo estimado: 2-3h.
 
@@ -66,7 +66,7 @@
 
 ---
 
-## 5. Apple Health (iOS) — Semantic color sem virar dashboard hospitalar
+## 5. Apple Health (iOS) — Semantic color em camadas
 
 **Padrão específico:** iOS 18 usa escala semântica de cores com três camadas: (a) a cor de fundo do card permanece neutra, (b) o ícone da métrica recebe a cor da categoria, (c) o valor numérico fica em cinza escuro neutro. Alerta de valor fora do range aparece como pill colorida abaixo do número — não muda o número em si.
 
@@ -151,7 +151,7 @@ A padronização de cores para glicemia segue o AGP (Ambulatory Glucose Profile)
 
 ---
 
-## 12. Reanimated 3 + Skia — Padrão de motion elegante vs exagerado (2025)
+## 12. Reanimated 3 + Skia — Padrão de motion sutil (2025)
 
 **Elegante:**
 - Spring com `stiffness: 180-220, damping: 20-26`
@@ -197,8 +197,8 @@ Ordenados por **impacto perceptível por usuária não-tech**:
 
 ---
 
-## Notas sobre o que NÃO roubar
+## Limites e ressalvas
 
-- **Dexcom Clarity mobile:** UX fraca. Evitar transposição de relatório PDF para mobile.
-- **mySugr monster:** roubar log rápido + feedback pós-save, NÃO o mascote (condescendente para adulta).
-- **Confetti em toda medição:** dilui significado. Confetti = primeiro log + cada 30 dias de streak, e só.
+- **Dexcom Clarity mobile:** UX limitada na adaptação de relatórios PDF para mobile. Aproveitar apenas o padrão AGP de cores.
+- **mySugr:** o aprendizado primário é o fluxo de log rápido + feedback pós-save. O mascote gamificado é parte do produto deles e não é o foco do que vale adaptar aqui.
+- **Confetti / celebrações visuais:** reservar para milestones reais (primeiro log, marcos de streak), nunca a cada interação — a celebração mantém significado quando é rara.
