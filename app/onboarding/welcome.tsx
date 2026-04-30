@@ -4,6 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Screen } from '@/ui/components/Screen';
 import { ActionButton } from '@/ui/components/ActionButton';
+import { BrandLogo } from '@/ui/components/BrandLogo';
 import { theme } from '@/ui/theme';
 
 export default function Welcome() {
@@ -11,7 +12,7 @@ export default function Welcome() {
     <Screen scroll={false}>
       <View style={styles.container}>
         <View style={styles.brandWrap}>
-          <View style={styles.brandDot} />
+          <BrandLogo size={72} />
           <Text style={styles.brand}>Glico</Text>
         </View>
         <View style={styles.center}>
@@ -29,14 +30,7 @@ export default function Welcome() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'space-between', paddingVertical: theme.spacing.xl },
-  brandWrap: { alignItems: 'center', gap: theme.spacing.sm, marginTop: theme.spacing.xl },
-  brandDot: {
-    width: 56, height: 56, borderRadius: 28,
-    backgroundColor: theme.colors.accent,
-    shadowColor: theme.colors.accent,
-    shadowOpacity: 0.25, shadowRadius: 16, shadowOffset: { width: 0, height: 8 },
-    elevation: 4,
-  },
+  brandWrap: { alignItems: 'center', gap: theme.spacing.md, marginTop: theme.spacing.xl },
   brand: { fontSize: theme.fontSizes.lg, fontFamily: theme.fonts.bold, color: theme.colors.text, letterSpacing: 1 },
   center: { gap: theme.spacing.md, alignItems: 'center', paddingHorizontal: theme.spacing.md },
   title: { fontSize: 28, fontFamily: theme.fonts.bold, color: theme.colors.text, textAlign: 'center', lineHeight: 34 },

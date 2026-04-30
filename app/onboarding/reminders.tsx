@@ -4,6 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Screen } from '@/ui/components/Screen';
 import { ActionButton } from '@/ui/components/ActionButton';
+import { StepDots } from '@/ui/components/StepDots';
 import { theme } from '@/ui/theme';
 import { ensurePermissions, syncReminders } from '@/notifications/scheduler';
 import { reminderRepo } from '@/domain/reminder';
@@ -27,8 +28,10 @@ export default function RemindersOnboarding() {
   return (
     <Screen showBack scroll>
       <View style={styles.container}>
+        <View style={{ marginBottom: theme.spacing.md }}>
+          <StepDots current={3} total={3} />
+        </View>
         <View>
-          <Text style={styles.step}>Passo 3 de 3</Text>
           <Text style={styles.title}>Lembretes</Text>
           <Text style={styles.body}>
             Criamos 6 horários ao longo do dia. Eles silenciam automaticamente se você já mediu na janela próxima.
@@ -51,10 +54,6 @@ export default function RemindersOnboarding() {
 }
 const styles = StyleSheet.create({
   container: { paddingVertical: theme.spacing.lg, gap: theme.spacing.md },
-  step: {
-    fontSize: theme.fontSizes.xs, color: theme.colors.accent,
-    textTransform: 'uppercase', letterSpacing: 0.8, fontWeight: '700', marginBottom: theme.spacing.xs,
-  },
   title: { fontSize: 28, fontWeight: '700', color: theme.colors.text, lineHeight: 34, marginBottom: theme.spacing.sm },
   body: { fontSize: theme.fontSizes.md, color: theme.colors.textMuted, lineHeight: 22, marginBottom: theme.spacing.lg },
   card: {

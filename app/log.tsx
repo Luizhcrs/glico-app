@@ -1,6 +1,7 @@
 // app/log.tsx
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import { router, useLocalSearchParams } from 'expo-router';
 import { measurementRepo } from '@/domain/measurement';
 import { getDbSync } from '@/db/client';
@@ -46,6 +47,7 @@ export default function LogScreen() {
       note: note.trim() ? note.trim() : null,
     });
     await silenceCoveredReminders(measuredAt);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     toast.success(`Medição salva: ${v} mg/dL`);
     router.replace('/');
   };
@@ -62,7 +64,11 @@ export default function LogScreen() {
   };
 
   const status = numeric > 0 ? statusFor(numeric, settings.targetLow, settings.targetHigh) : null;
-  const numColor = status === 'low' ? theme.colors.danger : status === 'high' ? theme.colors.warn : undefined;
+  const numColor =
+    status === 'low' ? theme.colors.danger :
+    status === 'high' ? theme.colors.warn :
+    status === 'ok' ? theme.colors.accent :
+    undefined;
 
   return (
     <Screen title="Nova medição" showBack scroll>

@@ -6,6 +6,7 @@ import { ChevronRight, Plus, AlertOctagon, Syringe } from 'lucide-react-native';
 import { useLatestMeasurement, useMeasurementsInRange } from '@/ui/hooks/useMeasurements';
 import { useSettings } from '@/ui/hooks/useSettings';
 import { insulinRepo } from '@/domain/insulin';
+import { measurementRepo } from '@/domain/measurement';
 import { getDbSync } from '@/db/client';
 import { Screen } from '@/ui/components/Screen';
 import { BigNumber } from '@/ui/components/BigNumber';
@@ -13,11 +14,12 @@ import { StatusPill, type Status } from '@/ui/components/StatusPill';
 import { ActionButton } from '@/ui/components/ActionButton';
 import { TrendArrow } from '@/ui/components/TrendArrow';
 import { MeasurementSheet } from '@/ui/components/MeasurementSheet';
+import { SwipeableMeasurementRow } from '@/ui/components/SwipeableMeasurementRow';
 import { useToast } from '@/ui/components/Toast';
 import { theme } from '@/ui/theme';
-import { format, formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import type { GlucoseContext } from '@/domain/types';
+import type { Measurement } from '@/domain/types';
 
 function statusFor(value: number, low: number, high: number): Status {
   if (value < low) return 'low';
@@ -25,15 +27,15 @@ function statusFor(value: number, low: number, high: number): Status {
   return 'ok';
 }
 
-const CONTEXT_LABEL: Record<GlucoseContext, string> = {
-  fasting: 'Jejum',
-  pre_meal: 'Pré-refeição',
-  post_meal: 'Pós-refeição',
-  bedtime: 'Antes de dormir',
-  exercise: 'Exercício',
-  hypo: 'Hipo',
-  random: 'Aleatório',
-};
+function bucketLabel(d: Date): 'Madrugada' | 'Manhã' | 'Tarde' | 'Noite' {
+  const h = d.getHours();
+  if (h < 6) return 'Madrugada';
+  if (h < 12) return 'Manhã';
+  if (h < 18) return 'Tarde';
+  return 'Noite';
+}
+
+interface DaySection { title: string; data: Measurement[]; }
 
 export default function HomeScreen() {
   const { data: settings } = useSettings();
@@ -66,6 +68,41 @@ export default function HomeScreen() {
     return map;
   }, [today]);
 
+  const sections: DaySection[] = useMemo(() => {
+    const order: Array<DaySection['title']> = ['Manhã', 'Tarde', 'Noite', 'Madrugada'];
+    const buckets: Record<string, Measurement[]> = {};
+    for (const m of today) {
+      const k = bucketLabel(new Date(m.measuredAt));
+      (buckets[k] ??= []).push(m);
+    }
+    return order
+      .filter((k) => buckets[k]?.length)
+      .map((k) => ({ title: k, data: buckets[k] }));
+  }, [today]);
+
+  const handleDelete = (m: Measurement) => {
+    const repo = measurementRepo(getDbSync());
+    repo.softDelete(m.id);
+    reloadAll();
+    toast.show(`Medição ${m.valueMgdl} mg/dL apagada`, {
+      variant: 'info',
+      duration: 5000,
+      action: {
+        label: 'Desfazer',
+        onPress: () => { repo.restore(m.id); reloadAll(); },
+      },
+    });
+  };
+
+  const insulinHintFor = (id: number): string | undefined => {
+    const ins = insulinByMeasurement.get(id);
+    if (!ins) return undefined;
+    const parts: string[] = [];
+    if (ins.bolus > 0) parts.push(`${ins.bolus.toFixed(1)}u rápida`);
+    if (ins.basal > 0) parts.push(`${ins.basal.toFixed(1)}u lenta`);
+    return parts.length ? parts.join(' + ') : undefined;
+  };
+
   if (!settings) return null;
   const name = settings.displayName ?? '';
   const greeting = greetingFor(new Date());
@@ -87,7 +124,11 @@ export default function HomeScreen() {
             </Text>
             <BigNumber
               value={latest.valueMgdl}
-              color={latest.valueMgdl < settings.targetLow ? theme.colors.danger : undefined}
+              color={
+                latest.valueMgdl < settings.targetLow ? theme.colors.danger :
+                latest.valueMgdl > settings.targetHigh ? theme.colors.warn :
+                theme.colors.accent
+              }
             />
             <View style={styles.heroPillRow}>
               <StatusPill status={statusFor(latest.valueMgdl, settings.targetLow, settings.targetHigh)} />
@@ -121,42 +162,34 @@ export default function HomeScreen() {
       </Pressable>
 
       <Text style={styles.section}>Hoje</Text>
-      {today.length === 0 ? (
+      {sections.length === 0 ? (
         <Text style={styles.subtle}>Sem medições hoje</Text>
       ) : (
-        <View style={styles.list}>
-          {today.map((m) => {
-            const status = statusFor(m.valueMgdl, settings.targetLow, settings.targetHigh);
-            const valueColor =
-              status === 'low' ? theme.colors.danger :
-              status === 'high' ? theme.colors.warn :
-              theme.colors.accent;
-            return (
-              <Pressable
-                key={m.id}
-                onPress={() => setSheetMeasurementId(m.id)}
-                style={({ pressed }) => [styles.row, pressed && { opacity: 0.6 }]}
-              >
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.rowTime}>{format(new Date(m.measuredAt), 'HH:mm')}</Text>
-                  <Text style={styles.rowCtx}>
-                    {CONTEXT_LABEL[m.context]}
-                    {(() => {
-                      const ins = insulinByMeasurement.get(m.id);
-                      if (!ins) return '';
-                      const parts: string[] = [];
-                      if (ins.bolus > 0) parts.push(`${ins.bolus.toFixed(1)}u rápida`);
-                      if (ins.basal > 0) parts.push(`${ins.basal.toFixed(1)}u lenta`);
-                      return parts.length ? ` · ${parts.join(' + ')}` : '';
-                    })()}
-                    {m.note ? ' · com nota' : ''}
-                  </Text>
-                </View>
-                <Text style={[styles.rowValue, { color: valueColor }]}>{m.valueMgdl}</Text>
-              </Pressable>
-            );
-          })}
-        </View>
+        sections.map((sec) => (
+          <View key={sec.title} style={styles.sectionBlock}>
+            <Text style={styles.bucketHeader}>{sec.title}</Text>
+            <View style={styles.list}>
+              {sec.data.map((m, i) => {
+                const status = statusFor(m.valueMgdl, settings.targetLow, settings.targetHigh);
+                const valueColor =
+                  status === 'low' ? theme.colors.danger :
+                  status === 'high' ? theme.colors.warn :
+                  theme.colors.accent;
+                return (
+                  <SwipeableMeasurementRow
+                    key={m.id}
+                    measurement={m}
+                    valueColor={valueColor}
+                    insulinHint={insulinHintFor(m.id)}
+                    isLast={i === sec.data.length - 1}
+                    onPress={() => setSheetMeasurementId(m.id)}
+                    onDelete={() => handleDelete(m)}
+                  />
+                );
+              })}
+            </View>
+          </View>
+        ))
       )}
 
       <MeasurementSheet
@@ -224,12 +257,10 @@ const styles = StyleSheet.create({
     borderRadius: theme.radii.md,
     overflow: 'hidden',
   },
-  row: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingVertical: theme.spacing.md, paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: StyleSheet.hairlineWidth, borderColor: theme.colors.border,
+  sectionBlock: { marginBottom: theme.spacing.md },
+  bucketHeader: {
+    fontSize: theme.fontSizes.xs, fontFamily: theme.fonts.semibold,
+    color: theme.colors.textMuted, textTransform: 'uppercase', letterSpacing: 0.6,
+    marginBottom: 6, marginLeft: 4,
   },
-  rowTime: { color: theme.colors.text, fontSize: theme.fontSizes.md, fontFamily: theme.fonts.semibold },
-  rowCtx: { color: theme.colors.textMuted, fontSize: theme.fontSizes.xs, fontFamily: theme.fonts.regular },
-  rowValue: { fontSize: theme.fontSizes.lg, fontFamily: theme.fonts.bold, fontVariant: ['tabular-nums'] },
 });

@@ -52,6 +52,7 @@ export default function HypoScreen() {
     });
     await silenceCoveredReminders(measuredAt);
     await scheduleHypoFollowUp(measuredAt);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
     toast.success('Hipo salva. Lembrete em 15 min pra remedir.');
     router.replace('/');
   };

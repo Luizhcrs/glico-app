@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, Text, TextInput, Alert } from 'react-native';
 import { Stack, useRouter, usePathname } from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Notifications from 'expo-notifications';
 import {
@@ -94,16 +95,18 @@ export default function RootLayout() {
     );
   }
   return (
-    <SafeAreaProvider>
-      <ToastProvider>
-        <Stack screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: theme.colors.bg },
-          animation: 'slide_from_right',
-          gestureEnabled: true,
-          fullScreenGestureEnabled: true,
-        }} />
-      </ToastProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <ToastProvider>
+          <Stack screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: theme.colors.bg },
+            animation: 'slide_from_right',
+            gestureEnabled: true,
+            fullScreenGestureEnabled: true,
+          }} />
+        </ToastProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }

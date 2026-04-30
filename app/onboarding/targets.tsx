@@ -4,14 +4,17 @@ import { View, Text, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Screen } from '@/ui/components/Screen';
 import { ActionButton } from '@/ui/components/ActionButton';
+import { StepDots } from '@/ui/components/StepDots';
 import { theme } from '@/ui/theme';
 
 export default function TargetsOnboarding() {
   return (
     <Screen showBack scroll={false}>
       <View style={styles.container}>
+        <View>
+          <StepDots current={2} total={3} />
+        </View>
         <View style={styles.center}>
-          <Text style={styles.step}>Passo 2 de 3</Text>
           <Text style={styles.title}>Seus alvos</Text>
           <Text style={styles.body}>
             Adotamos a faixa padrão: <Text style={styles.bold}>70 a 180 mg/dL</Text> no alvo, hipoglicemia abaixo de 70.
@@ -50,10 +53,6 @@ const statStyles = StyleSheet.create({
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'space-between', paddingVertical: theme.spacing.lg },
   center: { gap: theme.spacing.sm, marginTop: theme.spacing.xl },
-  step: {
-    fontSize: theme.fontSizes.xs, color: theme.colors.accent,
-    textTransform: 'uppercase', letterSpacing: 0.8, fontWeight: '700',
-  },
   title: { fontSize: 28, fontWeight: '700', color: theme.colors.text, lineHeight: 34 },
   body: { fontSize: theme.fontSizes.md, color: theme.colors.textMuted, lineHeight: 22 },
   bold: { fontWeight: '700', color: theme.colors.text },

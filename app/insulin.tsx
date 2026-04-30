@@ -1,6 +1,7 @@
 // app/insulin.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, TextInput } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { Minus, Plus, Check } from 'lucide-react-native';
 import { insulinRepo } from '@/domain/insulin';
@@ -63,6 +64,7 @@ export default function InsulinScreen() {
       takenAt: Date.now(),
       measurementId: lastM?.id ?? null,
     });
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     toast.success(`Dose registrada: ${units.toFixed(1)} U`);
     router.replace('/');
   };

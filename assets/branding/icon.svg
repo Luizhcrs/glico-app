@@ -14,12 +14,13 @@
            C 682 244, 720 282, 720 282
            C 720 282, 758 244, 758 240 Z"
         fill="#f5f3ed" opacity="0.92"/>
-  <!-- Lowercase g monogram -->
-  <text x="512" y="700"
+  <!-- Lowercase g monogram. Baseline empirico: descender de ~25% do font-size,
+       baseline em 640 deixa centro visual ~512. -->
+  <text x="512" y="640"
         font-family="-apple-system, 'Helvetica Neue', Arial, sans-serif"
-        font-size="640"
+        font-size="560"
         font-weight="200"
         fill="#f5f3ed"
         text-anchor="middle"
-        letter-spacing="-30">g</text>
+        letter-spacing="-26">g</text>
 </svg>

@@ -6,6 +6,7 @@ import { settingsRepo } from '@/domain/settings';
 import { getDbSync } from '@/db/client';
 import { Screen } from '@/ui/components/Screen';
 import { ActionButton } from '@/ui/components/ActionButton';
+import { StepDots } from '@/ui/components/StepDots';
 import { theme } from '@/ui/theme';
 
 export default function Name() {
@@ -18,8 +19,10 @@ export default function Name() {
   return (
     <Screen showBack scroll={false}>
       <View style={styles.container}>
+        <View>
+          <StepDots current={1} total={3} />
+        </View>
         <View style={styles.center}>
-          <Text style={styles.step}>Passo 1 de 3</Text>
           <Text style={styles.title}>Como você se chama?</Text>
           <Text style={styles.body}>Vamos personalizar seus lembretes.</Text>
           <TextInput
@@ -36,10 +39,6 @@ export default function Name() {
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'space-between', paddingVertical: theme.spacing.lg },
   center: { gap: theme.spacing.sm, marginTop: theme.spacing.xl },
-  step: {
-    fontSize: theme.fontSizes.xs, color: theme.colors.accent,
-    textTransform: 'uppercase', letterSpacing: 0.8, fontWeight: '700',
-  },
   title: { fontSize: 28, fontWeight: '700', color: theme.colors.text, lineHeight: 34 },
   body: { fontSize: theme.fontSizes.md, color: theme.colors.textMuted, lineHeight: 22 },
   input: {

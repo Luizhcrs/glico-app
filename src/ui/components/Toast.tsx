@@ -7,15 +7,21 @@ import { theme } from '@/ui/theme';
 
 type Variant = 'success' | 'error' | 'warning' | 'info';
 
+interface ToastAction {
+  label: string;
+  onPress: () => void;
+}
+
 interface ToastItem {
   id: number;
   message: string;
   variant: Variant;
   duration: number;
+  action?: ToastAction;
 }
 
 interface ToastContextValue {
-  show: (message: string, opts?: { variant?: Variant; duration?: number }) => void;
+  show: (message: string, opts?: { variant?: Variant; duration?: number; action?: ToastAction }) => void;
   success: (msg: string) => void;
   error: (msg: string) => void;
   warning: (msg: string) => void;
@@ -29,13 +35,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const idRef = useRef(0);
 
   const show = useCallback(
-    (message: string, opts?: { variant?: Variant; duration?: number }) => {
+    (message: string, opts?: { variant?: Variant; duration?: number; action?: ToastAction }) => {
       const id = ++idRef.current;
       const item: ToastItem = {
         id,
         message,
         variant: opts?.variant ?? 'info',
         duration: opts?.duration ?? 2800,
+        action: opts?.action,
       };
       setQueue((q) => [...q, item]);
     },
@@ -95,12 +102,22 @@ function ToastView({ item, onDismiss }: { item: ToastItem; onDismiss: () => void
   const Icon = cfg.icon;
   return (
     <Animated.View style={[styles.toast, { opacity, transform: [{ translateY: translate }], borderColor: cfg.border }]}>
-      <Pressable onPress={onDismiss} style={styles.row}>
-        <View style={[styles.iconWrap, { backgroundColor: cfg.iconBg }]}>
-          <Icon size={16} color={cfg.iconColor} strokeWidth={2.4} />
-        </View>
-        <Text style={styles.message} numberOfLines={3}>{item.message}</Text>
-      </Pressable>
+      <View style={styles.row}>
+        <Pressable onPress={onDismiss} style={[styles.row, { flex: 1 }]}>
+          <View style={[styles.iconWrap, { backgroundColor: cfg.iconBg }]}>
+            <Icon size={16} color={cfg.iconColor} strokeWidth={2.4} />
+          </View>
+          <Text style={styles.message} numberOfLines={3}>{item.message}</Text>
+        </Pressable>
+        {item.action ? (
+          <Pressable
+            onPress={() => { item.action?.onPress(); onDismiss(); }}
+            style={({ pressed }) => [styles.actionBtn, pressed && { opacity: 0.7 }]}
+          >
+            <Text style={styles.actionTxt}>{item.action.label}</Text>
+          </Pressable>
+        ) : null}
+      </View>
     </Animated.View>
   );
 }
@@ -159,4 +176,11 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     lineHeight: 18,
   },
+  actionBtn: {
+    paddingHorizontal: 10, paddingVertical: 6,
+    backgroundColor: theme.colors.cardBg,
+    borderRadius: theme.radii.pill,
+    marginLeft: 8,
+  },
+  actionTxt: { color: theme.colors.accent, fontFamily: theme.fonts.bold, fontSize: theme.fontSizes.xs },
 });

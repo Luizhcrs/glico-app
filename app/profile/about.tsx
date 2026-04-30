@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import * as Notifications from 'expo-notifications';
 import { Trash2, AlertTriangle } from 'lucide-react-native';
 import { Screen } from '@/ui/components/Screen';
+import { BrandLogo } from '@/ui/components/BrandLogo';
 import { useToast } from '@/ui/components/Toast';
 import { getDbSync } from '@/db/client';
 import { settingsRepo } from '@/domain/settings';
@@ -64,7 +65,7 @@ export default function AboutScreen() {
   return (
     <Screen title="Sobre & privacidade" showBack>
       <View style={styles.brand}>
-        <View style={styles.dot} />
+        <BrandLogo size={64} />
         <Text style={styles.title}>Glico</Text>
         <Text style={styles.version}>versão 0.1.0</Text>
       </View>
@@ -120,13 +121,7 @@ export default function AboutScreen() {
 }
 
 const styles = StyleSheet.create({
-  brand: { alignItems: 'center', gap: 6, marginVertical: theme.spacing.md },
-  dot: {
-    width: 48, height: 48, borderRadius: 24,
-    backgroundColor: theme.colors.accent,
-    shadowColor: theme.colors.accent, shadowOpacity: 0.25, shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 }, elevation: 4,
-  },
+  brand: { alignItems: 'center', gap: theme.spacing.sm, marginVertical: theme.spacing.md },
   title: { fontFamily: theme.fonts.bold, fontSize: theme.fontSizes.xl, color: theme.colors.text, letterSpacing: -0.5 },
   version: { color: theme.colors.textMuted, fontSize: theme.fontSizes.xs, fontFamily: theme.fonts.regular },
   card: {
