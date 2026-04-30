@@ -1,11 +1,12 @@
 // app/insulin.tsx
 import React, { useState } from 'react';
-import { View, Text, Pressable, StyleSheet, Alert, ScrollView, TextInput } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Alert, TextInput } from 'react-native';
 import { router } from 'expo-router';
 import { insulinRepo } from '@/domain/insulin';
 import { measurementRepo } from '@/domain/measurement';
 import { getDbSync } from '@/db/client';
 import { validateInsulinUnits } from '@/domain/validators';
+import { Screen } from '@/ui/components/Screen';
 import { ActionButton } from '@/ui/components/ActionButton';
 import { theme } from '@/ui/theme';
 import type { InsulinType } from '@/domain/types';
@@ -32,9 +33,7 @@ export default function InsulinScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Insulina aplicada</Text>
-
+    <Screen title="Insulina aplicada" showBack>
       <Text style={styles.label}>Tipo</Text>
       <View style={styles.row}>
         {(['basal','bolus'] as const).map((t) => (
@@ -65,14 +64,12 @@ export default function InsulinScreen() {
 
       <View style={{ height: theme.spacing.lg }} />
       <ActionButton label="Salvar dose" onPress={submit} />
-    </ScrollView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: theme.spacing.lg, gap: theme.spacing.sm },
-  title: { fontSize: theme.fontSizes.lg, fontWeight: '700', color: theme.colors.text, textAlign: 'center' },
-  label: { marginTop: theme.spacing.md, fontSize: theme.fontSizes.sm, color: theme.colors.textMuted, textTransform: 'uppercase', letterSpacing: 0.5 },
+  label: { marginTop: theme.spacing.md, marginBottom: theme.spacing.sm, fontSize: theme.fontSizes.xs, fontWeight: '700', color: theme.colors.textMuted, textTransform: 'uppercase', letterSpacing: 0.8 },
   row: { flexDirection: 'row', gap: theme.spacing.sm },
   tab: { flex: 1, paddingVertical: theme.spacing.md, borderRadius: theme.radii.md, backgroundColor: theme.colors.cardBg, alignItems: 'center' },
   tabSel: { backgroundColor: theme.colors.accent },

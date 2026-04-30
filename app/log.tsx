@@ -1,11 +1,13 @@
 // app/log.tsx
 import React, { useState } from 'react';
-import { View, Text, Alert, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Alert, StyleSheet } from 'react-native';
+import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
 import { measurementRepo } from '@/domain/measurement';
 import { getDbSync } from '@/db/client';
 import { validateMeasurement, needsConfirmation } from '@/domain/validators';
 import { useSettings } from '@/ui/hooks/useSettings';
+import { Screen } from '@/ui/components/Screen';
 import { BigNumber } from '@/ui/components/BigNumber';
 import { StatusPill, type Status } from '@/ui/components/StatusPill';
 import { ContextChips } from '@/ui/components/ContextChips';
@@ -51,24 +53,50 @@ export default function LogScreen() {
     }
   };
 
+  const status = numeric > 0 ? statusFor(numeric, settings.targetLow, settings.targetHigh) : null;
+  const numColor = status === 'low' ? theme.colors.danger : status === 'high' ? theme.colors.warn : undefined;
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Nova medição</Text>
-      <BigNumber value={numeric || '–'} />
-      {numeric > 0 && (
-        <StatusPill status={statusFor(numeric, settings.targetLow, settings.targetHigh)} />
-      )}
+    <Screen title="Nova medição" showBack scroll>
+      <Animated.View entering={FadeInDown.duration(400).springify().damping(18)} style={styles.heroCard}>
+        <BigNumber value={numeric || '—'} color={numColor} />
+        {status && <StatusPill status={status} />}
+      </Animated.View>
+
+      <Animated.View entering={FadeIn.duration(350).delay(100)}>
+        <Text style={styles.label}>Contexto</Text>
+        <ContextChips value={context} onChange={setContext} />
+      </Animated.View>
+
+      <View style={{ height: theme.spacing.lg }} />
+
+      <Animated.View entering={FadeInUp.duration(400).delay(160)}>
+        <Keypad value={value} onChange={setValue} onConfirm={submit} />
+      </Animated.View>
+
       <View style={{ height: theme.spacing.md }} />
-      <ContextChips value={context} onChange={setContext} />
-      <View style={{ height: theme.spacing.md }} />
-      <Keypad value={value} onChange={setValue} onConfirm={submit} />
-      <View style={{ height: theme.spacing.md }} />
-      <ActionButton label="Salvar" onPress={submit} disabled={!value} />
-    </ScrollView>
+      <ActionButton label="Salvar medição" onPress={submit} disabled={!value} />
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: theme.spacing.lg, gap: theme.spacing.sm },
-  title: { fontSize: theme.fontSizes.lg, fontWeight: '700', color: theme.colors.text, textAlign: 'center' },
+  heroCard: {
+    alignItems: 'center',
+    paddingVertical: theme.spacing.lg,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radii.lg,
+    marginBottom: theme.spacing.lg,
+    gap: theme.spacing.sm,
+    shadowColor: '#000',
+    shadowOpacity: 0.04,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 1,
+  },
+  label: {
+    fontSize: theme.fontSizes.xs, fontWeight: '700',
+    color: theme.colors.textMuted, textTransform: 'uppercase', letterSpacing: 0.8,
+    marginBottom: theme.spacing.sm,
+  },
 });

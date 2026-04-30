@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, Text, TextInput, Alert } from 'react-native';
 import { Stack, useRouter, usePathname } from 'expo-router';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Notifications from 'expo-notifications';
 import { openDb, getDbSync } from '@/db/client';
 import { settingsRepo } from '@/domain/settings';
@@ -16,21 +17,31 @@ export default function RootLayout() {
   const [pinTry, setPinTry] = useState('');
   const router = useRouter();
   const pathname = usePathname();
+  // Init once on mount
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       await openDb();
       const s = settingsRepo(getDbSync()).get();
+      if (cancelled) return;
       if (s.appLockEnabled && (await hasAppPin())) {
         setNeedLock(true);
       } else {
         setUnlocked(true);
       }
       setReady(true);
-      if (!s.displayName && !pathname?.startsWith('/onboarding')) {
-        router.replace('/onboarding/welcome');
-      }
     })();
-  }, [router, pathname]);
+    return () => { cancelled = true; };
+  }, []);
+
+  // Onboarding guard reacts to path changes without re-running init
+  useEffect(() => {
+    if (!ready) return;
+    const s = settingsRepo(getDbSync()).get();
+    if (!s.displayName && !pathname?.startsWith('/onboarding')) {
+      router.replace('/onboarding/welcome');
+    }
+  }, [ready, pathname, router]);
 
   useEffect(() => {
     const sub = Notifications.addNotificationResponseReceivedListener((resp) => {
@@ -62,10 +73,12 @@ export default function RootLayout() {
     );
   }
   return (
-    <Stack screenOptions={{
-      headerStyle: { backgroundColor: theme.colors.bg },
-      headerTitleStyle: { color: theme.colors.text },
-      contentStyle: { backgroundColor: theme.colors.bg },
-    }} />
+    <SafeAreaProvider>
+      <Stack screenOptions={{
+        headerShown: false,
+        contentStyle: { backgroundColor: theme.colors.bg },
+        animation: 'slide_from_right',
+      }} />
+    </SafeAreaProvider>
   );
 }

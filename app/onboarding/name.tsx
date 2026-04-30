@@ -4,6 +4,7 @@ import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { settingsRepo } from '@/domain/settings';
 import { getDbSync } from '@/db/client';
+import { Screen } from '@/ui/components/Screen';
 import { ActionButton } from '@/ui/components/ActionButton';
 import { theme } from '@/ui/theme';
 
@@ -15,16 +16,36 @@ export default function Name() {
     router.push('/onboarding/targets');
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Como você se chama?</Text>
-      <TextInput value={name} onChangeText={setName} placeholder="Nome"
-        style={styles.input} placeholderTextColor={theme.colors.textMuted} />
-      <ActionButton label="Continuar" onPress={next} disabled={!name} />
-    </View>
+    <Screen showBack scroll={false}>
+      <View style={styles.container}>
+        <View style={styles.center}>
+          <Text style={styles.step}>Passo 1 de 3</Text>
+          <Text style={styles.title}>Como você se chama?</Text>
+          <Text style={styles.body}>Vamos personalizar seus lembretes.</Text>
+          <TextInput
+            value={name} onChangeText={setName} placeholder="Seu nome"
+            style={styles.input} placeholderTextColor={theme.colors.textMuted}
+            autoFocus
+          />
+        </View>
+        <ActionButton label="Continuar" onPress={next} disabled={!name} />
+      </View>
+    </Screen>
   );
 }
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: theme.spacing.xl, gap: theme.spacing.md },
-  title: { fontSize: theme.fontSizes.lg, color: theme.colors.text },
-  input: { backgroundColor: theme.colors.surface, borderRadius: theme.radii.md, padding: theme.spacing.md, color: theme.colors.text, borderWidth: 1, borderColor: theme.colors.border },
+  container: { flex: 1, justifyContent: 'space-between', paddingVertical: theme.spacing.lg },
+  center: { gap: theme.spacing.sm, marginTop: theme.spacing.xl },
+  step: {
+    fontSize: theme.fontSizes.xs, color: theme.colors.accent,
+    textTransform: 'uppercase', letterSpacing: 0.8, fontWeight: '700',
+  },
+  title: { fontSize: 28, fontWeight: '700', color: theme.colors.text, lineHeight: 34 },
+  body: { fontSize: theme.fontSizes.md, color: theme.colors.textMuted, lineHeight: 22 },
+  input: {
+    backgroundColor: theme.colors.surface, borderRadius: theme.radii.md,
+    padding: theme.spacing.md, color: theme.colors.text,
+    borderWidth: 1, borderColor: theme.colors.border, fontSize: theme.fontSizes.md,
+    marginTop: theme.spacing.md,
+  },
 });
