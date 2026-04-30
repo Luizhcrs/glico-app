@@ -8,7 +8,7 @@ Ver [README.md](./README.md#setup).
 
 ## Workflow de mudança
 
-1. **Branch** por mudança. `master` continua em produção (= o que está no celular da Erica).
+1. **Branch** por mudança. `master` continua em produção (= o que está no celular da usuária final).
 2. **Commit** com Conventional Commits:
    - `feat:` feature nova
    - `fix:` bug fix
@@ -41,7 +41,7 @@ Lint não está configurado ainda — fica pra v0.2.
 2. Bumpar `version` em `package.json` e `app.json`
 3. `git tag v0.x.0 && git push origin v0.x.0`
 4. Disparar EAS build profile `preview` (APK standalone)
-5. Instalar APK no celular da Erica
+5. Instalar APK no celular da usuária final
 
 ## Padrões de código
 

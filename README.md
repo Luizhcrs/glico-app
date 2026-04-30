@@ -10,7 +10,7 @@ App mobile single-user de monitoramento de glicemia para diabetes tipo 1, com id
 
 ## O que é
 
-Glico é o aplicativo que minha esposa usa para registrar glicemia capilar (ponta-de-dedo), aplicações de insulina (caneta MDI) e episódios de hipoglicemia. Tudo offline, todos os dados ficam no aparelho dela.
+Glico é um aplicativo single-user que registra glicemia capilar (ponta-de-dedo), aplicações de insulina (caneta MDI) e episódios de hipoglicemia para diabetes tipo 1. Tudo offline, todos os dados ficam no aparelho do usuário.
 
 Não substitui orientação médica. Não calcula bolus. Não pretende ser um dispositivo médico.
 
@@ -184,7 +184,7 @@ Decisões completas em `docs/superpowers/specs/2026-04-29-glico-fast-logger-desi
 
 ## Roadmap
 
-### v0.1 (atual — em uso pela Erica)
+### v0.1 (atual)
 Tudo da seção "Funcionalidades atuais".
 
 ### v0.2
@@ -266,8 +266,6 @@ Se freezar: shake phone → "Reload". Se persistir: force-close + reabrir. Se pe
 
 ---
 
-## Quem é o usuário?
+## Persona alvo
 
-**Erica.** Esposa do Luiz. Diabetes tipo 1 desde 2018. Caneta MDI. Não-tech. Mede 4-6x/dia. Usa Basaglar (lenta) e Fiasp (rápida).
-
-Toda decisão de UX é pra ela. Sem nerdices, sem dashboard hospitalar, sem gamificação infantil.
+Adulto, diabetes tipo 1, caneta MDI, mede glicemia 4-6x/dia. Não-tech. Usa insulinas comuns no Brasil (Basaglar lenta, Fiasp rápida — quick-pick disponível na tela de insulina). Toda decisão de UX é pra esse perfil. Sem nerdices, sem dashboard hospitalar, sem gamificação infantil.

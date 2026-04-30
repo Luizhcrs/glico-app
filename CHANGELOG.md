@@ -2,61 +2,62 @@
 
 Todas as mudanças notáveis deste projeto. Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 
-## [Não lançado]
+## [0.1.0] — 2026-04-30 — Primeira versão estável
 
-### Adicionado
-- Foto de perfil via galeria (`expo-image-picker`)
-- Identidade visual completa Sage Calm: ícone, splash, adaptive Android, favicon
-- `BrandLogo` reutilizável em welcome + about
-- ConfirmDialog Sage Calm (substitui `Alert.alert` em outliers de medição)
-- Toast com botão de ação (slot pra Desfazer)
-- Swipe-to-delete na lista de hoje com 5s de undo
-- SectionList por janela do dia (Manhã / Tarde / Noite / Madrugada)
-- Progress dots (`StepDots`) no onboarding
-- TrendArrow (delta vs medição anterior) no home
-- Stats card de insulina no perfil (média U/dia em 7 dias, última marca)
-- Quick-pick de marcas de insulina (Basaglar, Lantus, Tresiba; Fiasp, NovoRapid, Humalog)
-- Pré-população automática de marca pela última usada por tipo
-- Reset total de perfil (zona de risco em Sobre & privacidade)
-- Lembretes inteligentes:
-  - `silenceCoveredReminders(measuredAt)` cancela ocorrência diária se medição ocorre na janela
-  - `installSmartReminderHandler()` suprime push em foreground se já mediu na janela
-- PDF do relatório refeito (Sage Calm, contexto traduzido, episódios de hipo, buckets de horário)
-- Haptic `notificationAsync('Success')` em log + insulin save; `'Warning'` no hypo
+Primeira release pública. APK standalone Android distribuído via GitHub Releases.
 
-### Melhorado
-- Fontes Plus Jakarta Sans (200/300/400/500/600/700) carregadas via `expo-font`
-- Ícones Lucide substituem caracteres unicode (header back, profile chevrons, keypad)
-- Insulina UX: termos lay primeiro ("Lenta (basal)", "Rápida (bolus)") + hint contextual
-- Profile rows agrupadas em surface cards com ícones contextuais (Target, Bell, Lock, Info)
-- Targets/Reminders/Lock/About com Screen wrapper (header + safe area corretos)
+### Funcional
+- Registro de medição de glicemia em ≤2 toques (keypad customizado, contexto pré-selecionado)
+- Registro de insulina basal/bolus com pré-população da última marca usada
+- Quick-pick de marcas comuns no Brasil (Basaglar, Lantus, Tresiba, Toujeo, Levemir; Fiasp, NovoRapid, Humalog, Apidra)
+- Registro de episódios de hipoglicemia com sintomas, tratamento e tempo de recuperação
+- **Lembretes inteligentes**: silenciam automaticamente se houve medição na janela ±tolerância (foreground via `setNotificationHandler`, background via cancel + reagendar)
+- Tendência: gráfico victory-native v41 + TIR (time in range) + média + DP + hipos + buckets manhã/tarde/noite/madrugada
+- Relatório PDF Sage Calm (contexto traduzido, episódios de hipo, valores coloridos por status)
+- Foto de perfil via galeria
+- Backup `.json` AES-256-GCM (PBKDF2-SHA256, 600k iter, salt 16 bytes)
+- App lock por PIN (Keychain iOS / Keystore Android via expo-secure-store)
+- Reset total de perfil
+- Swipe-to-delete na lista do dia com 5s de undo
+- Edição de medição via bottom sheet
+- Onboarding 4 passos com progress dots
+
+### Visual
+- Identidade Sage Calm completa: ícone, splash, adaptive Android, favicon
+- Plus Jakarta Sans (200/300/400/500/600/700) via `expo-font`
+- Ícones Lucide (zero unicode hack)
 - BigNumber colorido por status (verde alvo, âmbar hiper, vermelho hipo) com tabular-nums
-- Gestos: `gestureEnabled: true` + `fullScreenGestureEnabled: true` no Stack
-- MeasurementSheet close instantâneo (sem 200ms de espera)
+- TrendArrow (delta vs medição anterior)
+- Status pills com ícones contextuais
+- ConfirmDialog próprio (substitui `Alert.alert` nativo)
+- Toast com botão de ação
+- Haptic feedback em saves e ações destrutivas
+- SectionList por janela do dia
+- Animações sutis (apenas press feedback e modal slide)
 
-### Corrigido
-- Loop infinito "Maximum update depth exceeded" em `_layout.tsx`, `index.tsx`, `trend.tsx`
-- Onboarding bugado pós-reset (Screen com `scroll={false}` agora aplica `flex: 1`)
-- Bundle errors de native peers (`react-native-safe-area-context`, `react-native-screens`, `expo-linking`, `expo-font`, `react-native-nitro-modules`)
-- Compatibilidade `expo-dev-client` ~6.0.21 com SDK 54 (era ^55, quebrava Kotlin compile)
-- Cache gradle corrompido após process kill (workaround documentado)
+### Stack
+- Expo SDK 54, expo-router, TypeScript strict
+- expo-sqlite (5 tabelas, migrations versionadas)
+- react-native-quick-crypto (AES-256-GCM, PBKDF2)
+- expo-notifications (smart silencer)
+- victory-native v41 (Skia)
+- @gorhom/bottom-sheet, react-native-gesture-handler, react-native-reanimated
+- lucide-react-native, @expo-google-fonts/plus-jakarta-sans
 
-## [0.1.0] — 2026-04-29
+### Privacidade
+- Zero backend. Dados sensíveis nunca trafegam.
+- Backup é cifrado, senha é responsabilidade do usuário.
+- Sem analytics, sem crash reporting, sem telemetria.
+- Sem tracking de qualquer tipo.
 
-### Lançado
-- MVP inicial: registro de medição em ≤2 toques
-- Registro de insulina basal/bolus
-- Registro de episódios de hipoglicemia
-- Lembretes diários (sem inteligência ainda)
-- Tendência: gráfico victory-native + TIR + média + buckets
-- Relatório PDF inicial
-- Backup `.json` AES-256-GCM (PBKDF2-SHA256, 600k iter)
-- App lock por PIN (Keychain/Keystore via expo-secure-store)
-- Onboarding 4 passos (welcome → name → targets → reminders)
-- Stack: Expo SDK 54, expo-router, TypeScript, expo-sqlite, victory-native v41
+### Limitações conhecidas
+- DB SQLite não cifrado at-rest (planejado v0.2 com `op-sqlite` + SQLCipher).
+- Sem dark mode (planejado v0.3).
+- Acessibilidade WCAG parcial (touch targets e contraste OK, faltam `accessibilityLabel` consistentes).
 
 ### Notas técnicas
-- Projeto greenfield iniciado em 2026-04-29
-- 34 tasks executadas via subagent-driven-development em 7 fases
 - 44 testes unit/integration verdes
-- Tag `v0.1.0` aplicada após smoke + tsc clean
+- TypeScript strict mode
+- 34 tasks de implementação executadas via subagent-driven-development
+- Distribuição: APK standalone Android (signed debug keystore, sideload)
+- **Não publicado em loja** (Play Store / App Store) — uso pessoal
