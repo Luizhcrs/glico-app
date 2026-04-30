@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1777570041971" clover="3.2.0">
+  <project timestamp="1777570041971" name="All files">
+    <metrics statements="204" coveredstatements="204" conditionals="160" coveredconditionals="134" methods="65" coveredmethods="65" elements="429" coveredelements="403" complexity="0" loc="204" ncloc="204" packages="5" files="14" classes="14"/>
+    <package name="src.crypto">
+      <metrics statements="35" coveredstatements="35" conditionals="10" coveredconditionals="6" methods="5" coveredmethods="5"/>
+      <file name="backup.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\crypto\backup.ts">
+        <metrics statements="35" coveredstatements="35" conditionals="10" coveredconditionals="6" methods="5" coveredmethods="5"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="15" count="4" type="cond" truecount="3" falsecount="3"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="42" count="2" type="cond" truecount="3" falsecount="1"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="44" count="2" type="stmt"/>
+        <line num="45" count="2" type="stmt"/>
+        <line num="46" count="2" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="53" count="2" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.db">
+      <metrics statements="20" coveredstatements="20" conditionals="8" coveredconditionals="6" methods="3" coveredmethods="3"/>
+      <file name="migrations.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\db\migrations.ts">
+        <metrics statements="11" coveredstatements="11" conditionals="4" coveredconditionals="3" methods="2" coveredmethods="2"/>
+        <line num="2" count="6" type="stmt"/>
+        <line num="11" count="6" type="stmt"/>
+        <line num="12" count="39" type="stmt"/>
+        <line num="13" count="39" type="stmt"/>
+        <line num="14" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="16" count="36" type="stmt"/>
+        <line num="20" count="6" type="stmt"/>
+        <line num="21" count="37" type="stmt"/>
+        <line num="22" count="37" type="cond" truecount="2" falsecount="0"/>
+        <line num="23" count="252" type="stmt"/>
+        <line num="24" count="36" type="stmt"/>
+      </file>
+      <file name="schema.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\db\schema.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="6" type="stmt"/>
+        <line num="68" count="6" type="stmt"/>
+      </file>
+      <file name="seed.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\db\seed.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="4" coveredconditionals="3" methods="1" coveredmethods="1"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="14" count="12" type="stmt"/>
+        <line num="15" count="12" type="cond" truecount="3" falsecount="1"/>
+        <line num="16" count="11" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="18" count="66" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.domain">
+      <metrics statements="124" coveredstatements="124" conditionals="127" coveredconditionals="109" methods="49" coveredmethods="49"/>
+      <file name="hypo.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\domain\hypo.ts">
+        <metrics statements="15" coveredstatements="15" conditionals="16" coveredconditionals="14" methods="7" coveredmethods="7"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="6" type="stmt"/>
+        <line num="46" count="5" type="stmt"/>
+        <line num="47" count="5" type="stmt"/>
+        <line num="52" count="5" type="stmt"/>
+        <line num="53" count="5" type="stmt"/>
+        <line num="66" count="5" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="75" count="2" type="stmt"/>
+        <line num="76" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="79" count="2" type="stmt"/>
+        <line num="80" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="83" count="3" type="stmt"/>
+        <line num="88" count="3" type="cond" truecount="1" falsecount="1"/>
+      </file>
+      <file name="insulin.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\domain\insulin.ts">
+        <metrics statements="20" coveredstatements="20" conditionals="14" coveredconditionals="12" methods="9" coveredmethods="9"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="8" type="stmt"/>
+        <line num="43" count="14" type="stmt"/>
+        <line num="48" count="14" type="stmt"/>
+        <line num="51" count="3" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="57" count="3" type="stmt"/>
+        <line num="58" count="3" type="stmt"/>
+        <line num="59" count="3" type="stmt"/>
+        <line num="65" count="3" type="stmt"/>
+        <line num="68" count="3" type="stmt"/>
+        <line num="74" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="86" count="3" type="stmt"/>
+        <line num="87" count="3" type="stmt"/>
+        <line num="93" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="94" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="95" count="3" type="stmt"/>
+      </file>
+      <file name="measurement.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\domain\measurement.ts">
+        <metrics statements="24" coveredstatements="24" conditionals="24" coveredconditionals="18" methods="12" coveredmethods="12"/>
+        <line num="18" count="10" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="40" count="11" type="stmt"/>
+        <line num="42" count="12" type="stmt"/>
+        <line num="43" count="12" type="stmt"/>
+        <line num="48" count="12" type="stmt"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="57" count="3" type="stmt"/>
+        <line num="58" count="3" type="stmt"/>
+        <line num="59" count="3" type="stmt"/>
+        <line num="62" count="4" type="stmt"/>
+        <line num="68" count="4" type="stmt"/>
+        <line num="71" count="5" type="stmt"/>
+        <line num="72" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="75" count="2" type="stmt"/>
+        <line num="80" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="86" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="89" count="3" type="stmt"/>
+        <line num="95" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="98" count="2" type="stmt"/>
+        <line num="99" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="100" count="1" type="stmt"/>
+      </file>
+      <file name="reminder.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\domain\reminder.ts">
+        <metrics statements="14" coveredstatements="14" conditionals="32" coveredconditionals="28" methods="9" coveredmethods="9"/>
+        <line num="17" count="60" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="7" type="stmt"/>
+        <line num="41" count="8" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="47" count="9" type="stmt"/>
+        <line num="48" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="67" count="4" type="stmt"/>
+        <line num="68" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="69" count="3" type="stmt"/>
+        <line num="84" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="87" count="1" type="stmt"/>
+      </file>
+      <file name="settings.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\domain\settings.ts">
+        <metrics statements="9" coveredstatements="9" conditionals="10" coveredconditionals="7" methods="4" coveredmethods="4"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="42" count="3" type="stmt"/>
+        <line num="43" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="44" count="3" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+      </file>
+      <file name="stats.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\domain\stats.ts">
+        <metrics statements="26" coveredstatements="26" conditionals="16" coveredconditionals="15" methods="4" coveredmethods="4"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="25" count="3" type="stmt"/>
+        <line num="26" count="10" type="stmt"/>
+        <line num="27" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="5" type="stmt"/>
+        <line num="30" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="33" count="10" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="54" count="4" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="3" type="stmt"/>
+        <line num="65" count="3" type="cond" truecount="5" falsecount="1"/>
+        <line num="66" count="3" type="stmt"/>
+        <line num="67" count="3" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="73" count="4" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+      </file>
+      <file name="validators.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\domain\validators.ts">
+        <metrics statements="16" coveredstatements="16" conditionals="15" coveredconditionals="15" methods="4" coveredmethods="4"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="6" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="7" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="27" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.notifications">
+      <metrics statements="18" coveredstatements="18" conditionals="12" coveredconditionals="11" methods="3" coveredmethods="3"/>
+      <file name="deeplink.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\notifications\deeplink.ts">
+        <metrics statements="13" coveredstatements="13" conditionals="10" coveredconditionals="9" methods="1" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="3" type="stmt"/>
+        <line num="13" count="3" type="stmt"/>
+        <line num="14" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="2" type="cond" truecount="3" falsecount="1"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="20" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="21" count="2" type="stmt"/>
+      </file>
+      <file name="silencer.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\src\notifications\silencer.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="9" count="3" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="11" count="3" type="cond" truecount="2" falsecount="0"/>
+      </file>
+    </package>
+    <package name="tests.helpers">
+      <metrics statements="7" coveredstatements="7" conditionals="3" coveredconditionals="2" methods="5" coveredmethods="5"/>
+      <file name="sqliteAdapter.ts" path="C:\Users\luiz.rs\Documents\Projects\glico-app\tests\helpers\sqliteAdapter.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="3" coveredconditionals="2" methods="5" coveredmethods="5"/>
+        <line num="11" count="6" type="stmt"/>
+        <line num="12" count="36" type="stmt"/>
+        <line num="13" count="252" type="stmt"/>
+        <line num="15" count="156" type="stmt"/>
+        <line num="16" count="156" type="stmt"/>
+        <line num="18" count="88" type="cond" truecount="1" falsecount="0"/>
+        <line num="19" count="19" type="cond" truecount="1" falsecount="0"/>
+      </file>
+    </package>
+  </project>
+</coverage>
