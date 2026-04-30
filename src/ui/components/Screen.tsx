@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet, ScrollView, StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { ChevronLeft } from 'lucide-react-native';
 import { theme } from '@/ui/theme';
 
 interface ScreenProps {
@@ -36,7 +37,7 @@ export function Screen({
         <View style={styles.header}>
           {showBack ? (
             <Pressable onPress={onBack ?? (() => router.back())} hitSlop={12} style={styles.backBtn}>
-              <Text style={styles.backTxt}>‹</Text>
+              <ChevronLeft size={26} color={theme.colors.text} strokeWidth={2.2} />
             </Pressable>
           ) : <View style={styles.spacer} />}
           {title ? <Text style={styles.title} numberOfLines={1}>{title}</Text> : <View style={{ flex: 1 }} />}
@@ -48,7 +49,10 @@ export function Screen({
         </View>
       )}
       <Container
-        {...(scroll ? { contentContainerStyle: [styles.content, { paddingBottom: insets.bottom + theme.spacing.xl }, contentStyle] } : { style: [styles.content, { paddingBottom: insets.bottom + theme.spacing.xl }, contentStyle] })}
+        {...(scroll
+          ? { contentContainerStyle: [styles.content, { paddingBottom: insets.bottom + theme.spacing.xl }, contentStyle] }
+          : { style: [styles.content, styles.contentFill, { paddingBottom: insets.bottom + theme.spacing.xl }, contentStyle] }
+        )}
         keyboardShouldPersistTaps="handled"
       >
         {children}
@@ -70,18 +74,22 @@ const styles = StyleSheet.create({
   backBtn: {
     width: 44, height: 44, alignItems: 'center', justifyContent: 'center',
   },
-  backTxt: { fontSize: 32, color: theme.colors.text, lineHeight: 36, fontWeight: '300' },
   title: {
     flex: 1, textAlign: 'center', fontSize: theme.fontSizes.md,
-    fontWeight: '600', color: theme.colors.text,
+    fontFamily: theme.fonts.semibold,
+    color: theme.colors.text,
   },
   rightBtn: {
     height: 44, paddingHorizontal: theme.spacing.md,
     alignItems: 'center', justifyContent: 'center',
   },
-  rightTxt: { color: theme.colors.accent, fontSize: theme.fontSizes.sm, fontWeight: '600' },
+  rightTxt: {
+    color: theme.colors.accent, fontSize: theme.fontSizes.sm,
+    fontFamily: theme.fonts.semibold,
+  },
   content: {
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.md,
   },
+  contentFill: { flex: 1 },
 });

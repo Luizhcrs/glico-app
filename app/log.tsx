@@ -1,10 +1,10 @@
 // app/log.tsx
 import React, { useState } from 'react';
-import { View, Text, Alert, StyleSheet } from 'react-native';
-import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { measurementRepo } from '@/domain/measurement';
 import { getDbSync } from '@/db/client';
+import { silenceCoveredReminders } from '@/notifications/smart';
 import { validateMeasurement, needsConfirmation } from '@/domain/validators';
 import { useSettings } from '@/ui/hooks/useSettings';
 import { Screen } from '@/ui/components/Screen';
@@ -13,6 +13,8 @@ import { StatusPill, type Status } from '@/ui/components/StatusPill';
 import { ContextChips } from '@/ui/components/ContextChips';
 import { Keypad } from '@/ui/components/Keypad';
 import { ActionButton } from '@/ui/components/ActionButton';
+import { ConfirmDialog } from '@/ui/components/ConfirmDialog';
+import { useToast } from '@/ui/components/Toast';
 import { theme } from '@/ui/theme';
 import type { GlucoseContext, MealLabel } from '@/domain/types';
 
@@ -24,30 +26,36 @@ export default function LogScreen() {
   const params = useLocalSearchParams<{ context?: string; meal?: string }>();
   const initialContext = (params.context as GlucoseContext) ?? 'random';
   const { data: settings } = useSettings();
+  const toast = useToast();
   const [value, setValue] = useState('');
   const [context, setContext] = useState<GlucoseContext>(initialContext);
+  const [note, setNote] = useState('');
+  const [confirmOutlier, setConfirmOutlier] = useState(false);
 
   if (!settings) return null;
   const numeric = value === '' ? 0 : parseInt(value, 10);
 
+  const persist = async () => {
+    const v = parseInt(value, 10);
+    const measuredAt = Date.now();
+    measurementRepo(getDbSync()).insert({
+      valueMgdl: v,
+      measuredAt,
+      context,
+      mealLabel: (params.meal as MealLabel) ?? null,
+      note: note.trim() ? note.trim() : null,
+    });
+    await silenceCoveredReminders(measuredAt);
+    toast.success(`Medição salva: ${v} mg/dL`);
+    router.replace('/');
+  };
+
   const submit = () => {
     const v = parseInt(value, 10);
     const valid = validateMeasurement(v);
-    if (!valid.ok) { Alert.alert('Valor inválido', valid.reason); return; }
-    const persist = () => {
-      measurementRepo(getDbSync()).insert({
-        valueMgdl: v,
-        measuredAt: Date.now(),
-        context,
-        mealLabel: (params.meal as MealLabel) ?? null,
-      });
-      router.replace('/');
-    };
+    if (!valid.ok) { toast.error(`Valor inválido: ${valid.reason}`); return; }
     if (needsConfirmation(v)) {
-      Alert.alert('Tem certeza desse valor?', `${v} mg/dL é incomum. Confirma?`, [
-        { text: 'Cancelar' },
-        { text: 'Confirmar', onPress: persist },
-      ]);
+      setConfirmOutlier(true);
     } else {
       persist();
     }
@@ -58,24 +66,41 @@ export default function LogScreen() {
 
   return (
     <Screen title="Nova medição" showBack scroll>
-      <Animated.View entering={FadeInDown.duration(400).springify().damping(18)} style={styles.heroCard}>
+      <View style={styles.heroCard}>
         <BigNumber value={numeric || '—'} color={numColor} />
         {status && <StatusPill status={status} />}
-      </Animated.View>
+      </View>
 
-      <Animated.View entering={FadeIn.duration(350).delay(100)}>
-        <Text style={styles.label}>Contexto</Text>
-        <ContextChips value={context} onChange={setContext} />
-      </Animated.View>
+      <Text style={styles.label}>Contexto</Text>
+      <ContextChips value={context} onChange={setContext} />
 
       <View style={{ height: theme.spacing.lg }} />
 
-      <Animated.View entering={FadeInUp.duration(400).delay(160)}>
-        <Keypad value={value} onChange={setValue} onConfirm={submit} />
-      </Animated.View>
+      <Keypad value={value} onChange={setValue} onConfirm={submit} />
+
+      <Text style={styles.label}>Nota (opcional)</Text>
+      <TextInput
+        value={note}
+        onChangeText={setNote}
+        placeholder="Ex.: pós exercício, jantei tarde…"
+        placeholderTextColor={theme.colors.textMuted}
+        style={styles.noteInput}
+        maxLength={200}
+        multiline
+      />
 
       <View style={{ height: theme.spacing.md }} />
       <ActionButton label="Salvar medição" onPress={submit} disabled={!value} />
+
+      <ConfirmDialog
+        visible={confirmOutlier}
+        title="Tem certeza desse valor?"
+        message={`${numeric} mg/dL é incomum. Confirma o registro?`}
+        confirmLabel="Confirmar"
+        cancelLabel="Cancelar"
+        onConfirm={() => { setConfirmOutlier(false); persist(); }}
+        onCancel={() => setConfirmOutlier(false)}
+      />
     </Screen>
   );
 }
@@ -95,8 +120,18 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   label: {
-    fontSize: theme.fontSizes.xs, fontWeight: '700',
+    fontSize: theme.fontSizes.xs, fontFamily: theme.fonts.bold,
     color: theme.colors.textMuted, textTransform: 'uppercase', letterSpacing: 0.8,
-    marginBottom: theme.spacing.sm,
+    marginTop: theme.spacing.lg, marginBottom: theme.spacing.sm,
+  },
+  noteInput: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radii.md,
+    padding: 12,
+    color: theme.colors.text,
+    fontSize: theme.fontSizes.sm,
+    fontFamily: theme.fonts.regular,
+    borderWidth: 1, borderColor: theme.colors.border,
+    minHeight: 56, textAlignVertical: 'top',
   },
 });

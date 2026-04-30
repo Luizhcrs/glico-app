@@ -85,5 +85,29 @@ export function measurementRepo(db: DbLike) {
       );
       return r ? toDomain(r) : null;
     },
+    previousBefore(ts: number): Measurement | null {
+      const r = db.get<DbRow>(
+        `SELECT * FROM measurement
+         WHERE deleted_at IS NULL AND measured_at < ?
+         ORDER BY measured_at DESC LIMIT 1`,
+        [ts],
+      );
+      return r ? toDomain(r) : null;
+    },
+    update(id: number, patch: Partial<Pick<Measurement, 'valueMgdl' | 'context' | 'mealLabel' | 'note'>>): void {
+      const cur = this.findById(id);
+      if (!cur) return;
+      db.run(
+        `UPDATE measurement SET value_mgdl = ?, context = ?, meal_label = ?, note = ?, updated_at = ? WHERE id = ?`,
+        [
+          patch.valueMgdl ?? cur.valueMgdl,
+          patch.context ?? cur.context,
+          patch.mealLabel === undefined ? cur.mealLabel : patch.mealLabel,
+          patch.note === undefined ? cur.note : patch.note,
+          Date.now(),
+          id,
+        ],
+      );
+    },
   };
 }

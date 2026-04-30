@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6b8c6b"/>
+      <stop offset="100%" stop-color="#4f6e4f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="232" ry="232" fill="url(#bg)"/>
+  <!-- Glucose drop accent -->
+  <path d="M 758 240
+           C 758 196, 720 158, 720 158
+           C 720 158, 682 196, 682 196
+           C 682 244, 720 282, 720 282
+           C 720 282, 758 244, 758 240 Z"
+        fill="#f5f3ed" opacity="0.92"/>
+  <!-- Lowercase g monogram -->
+  <text x="512" y="700"
+        font-family="-apple-system, 'Helvetica Neue', Arial, sans-serif"
+        font-size="640"
+        font-weight="200"
+        fill="#f5f3ed"
+        text-anchor="middle"
+        letter-spacing="-30">g</text>
+</svg>

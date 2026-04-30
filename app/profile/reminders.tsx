@@ -1,11 +1,11 @@
 // app/profile/reminders.tsx
-import React from 'react';
-import { View, Text, ScrollView, Switch, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, Switch, StyleSheet } from 'react-native';
 import { reminderRepo } from '@/domain/reminder';
 import { getDbSync } from '@/db/client';
-import { useEffect, useState, useCallback } from 'react';
 import type { Reminder } from '@/domain/types';
 import { syncReminders } from '@/notifications/scheduler';
+import { Screen } from '@/ui/components/Screen';
 import { theme } from '@/ui/theme';
 
 export default function RemindersScreen() {
@@ -23,26 +23,45 @@ export default function RemindersScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.help}>Toque para alternar. Lembrete silencia automaticamente se você já mediu na janela ±tolerância.</Text>
-      {items.map((r) => (
-        <View key={r.id} style={styles.row}>
-          <View>
-            <Text style={styles.label}>{r.label}</Text>
-            <Text style={styles.subtle}>{r.timeOfDay} · ±{r.toleranceMinutes}min</Text>
+    <Screen title="Lembretes" showBack>
+      <Text style={styles.help}>
+        Lembretes silenciam automaticamente se você já mediu na janela próxima.
+      </Text>
+      <View style={styles.group}>
+        {items.map((r, i) => (
+          <View key={r.id} style={[styles.row, i < items.length - 1 && styles.rowBorder]}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.label}>{r.label}</Text>
+              <Text style={styles.subtle}>{r.timeOfDay} · janela ±{r.toleranceMinutes}min</Text>
+            </View>
+            <Switch
+              value={r.enabled}
+              onValueChange={(v) => toggle(r, v)}
+              thumbColor={r.enabled ? theme.colors.accent : '#ccc'}
+              trackColor={{ false: theme.colors.border, true: theme.colors.accentMuted }}
+            />
           </View>
-          <Switch value={r.enabled} onValueChange={(v) => toggle(r, v)}
-            thumbColor={r.enabled ? theme.colors.accent : '#ccc'} />
-        </View>
-      ))}
-    </ScrollView>
+        ))}
+      </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: theme.spacing.lg, gap: theme.spacing.sm },
-  help: { color: theme.colors.textMuted, fontSize: theme.fontSizes.xs, marginBottom: theme.spacing.md },
-  row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: theme.spacing.md, borderBottomWidth: 1, borderColor: theme.colors.border },
-  label: { color: theme.colors.text, fontSize: theme.fontSizes.md, fontWeight: '600' },
-  subtle: { color: theme.colors.textMuted, fontSize: theme.fontSizes.xs },
+  help: {
+    color: theme.colors.textMuted, fontSize: theme.fontSizes.sm,
+    fontFamily: theme.fonts.regular, marginBottom: theme.spacing.lg, lineHeight: 20,
+  },
+  group: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radii.md,
+    overflow: 'hidden',
+  },
+  row: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    paddingVertical: theme.spacing.md, paddingHorizontal: theme.spacing.md,
+  },
+  rowBorder: { borderBottomWidth: StyleSheet.hairlineWidth, borderColor: theme.colors.border },
+  label: { color: theme.colors.text, fontSize: theme.fontSizes.md, fontFamily: theme.fonts.semibold },
+  subtle: { color: theme.colors.textMuted, fontSize: theme.fontSizes.xs, fontFamily: theme.fonts.regular, marginTop: 2 },
 });

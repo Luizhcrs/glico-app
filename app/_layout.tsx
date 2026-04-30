@@ -4,13 +4,34 @@ import { View, ActivityIndicator, Text, TextInput, Alert } from 'react-native';
 import { Stack, useRouter, usePathname } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Notifications from 'expo-notifications';
+import {
+  useFonts,
+  PlusJakartaSans_200ExtraLight,
+  PlusJakartaSans_300Light,
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_500Medium,
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_700Bold,
+} from '@expo-google-fonts/plus-jakarta-sans';
 import { openDb, getDbSync } from '@/db/client';
 import { settingsRepo } from '@/domain/settings';
 import { hasAppPin, verifyAppPin } from '@/crypto/keychain';
+import { installSmartReminderHandler } from '@/notifications/smart';
 import { ActionButton } from '@/ui/components/ActionButton';
+import { ToastProvider } from '@/ui/components/Toast';
 import { theme } from '@/ui/theme';
 
+installSmartReminderHandler();
+
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    PlusJakartaSans_200ExtraLight,
+    PlusJakartaSans_300Light,
+    PlusJakartaSans_400Regular,
+    PlusJakartaSans_500Medium,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_700Bold,
+  });
   const [ready, setReady] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [needLock, setNeedLock] = useState(false);
@@ -53,7 +74,7 @@ export default function RootLayout() {
     });
     return () => sub.remove();
   }, [router]);
-  if (!ready) {
+  if (!ready || !fontsLoaded) {
     return <View style={{ flex:1, alignItems:'center', justifyContent:'center', backgroundColor: theme.colors.bg }}>
       <ActivityIndicator color={theme.colors.accent} />
     </View>;
@@ -74,11 +95,15 @@ export default function RootLayout() {
   }
   return (
     <SafeAreaProvider>
-      <Stack screenOptions={{
-        headerShown: false,
-        contentStyle: { backgroundColor: theme.colors.bg },
-        animation: 'slide_from_right',
-      }} />
+      <ToastProvider>
+        <Stack screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: theme.colors.bg },
+          animation: 'slide_from_right',
+          gestureEnabled: true,
+          fullScreenGestureEnabled: true,
+        }} />
+      </ToastProvider>
     </SafeAreaProvider>
   );
 }

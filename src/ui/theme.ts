@@ -24,12 +24,22 @@ export const spacing = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32 };
 export const fontSizes = { xs: 11, sm: 13, md: 15, lg: 18, xl: 24, hero: 56 };
 export const fontWeights = { regular: '400' as const, medium: '500' as const, bold: '700' as const };
 
+export const fonts = {
+  regular: 'PlusJakartaSans_400Regular',
+  medium: 'PlusJakartaSans_500Medium',
+  semibold: 'PlusJakartaSans_600SemiBold',
+  bold: 'PlusJakartaSans_700Bold',
+  extralight: 'PlusJakartaSans_200ExtraLight',
+  light: 'PlusJakartaSans_300Light',
+};
+
 export type Theme = {
   colors: typeof colors;
   radii: typeof radii;
   spacing: typeof spacing;
   fontSizes: typeof fontSizes;
   fontWeights: typeof fontWeights;
+  fonts: typeof fonts;
 };
 
-export const theme: Theme = { colors, radii, spacing, fontSizes, fontWeights };
+export const theme: Theme = { colors, radii, spacing, fontSizes, fontWeights, fonts };

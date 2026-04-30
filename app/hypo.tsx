@@ -1,16 +1,17 @@
 // app/hypo.tsx
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, Alert } from 'react-native';
-import Animated, { FadeInDown, FadeInUp, useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { hypoRepo } from '@/domain/hypo';
 import { getDbSync } from '@/db/client';
 import { scheduleHypoFollowUp } from '@/notifications/scheduler';
+import { silenceCoveredReminders } from '@/notifications/smart';
 import { Screen } from '@/ui/components/Screen';
 import { Keypad } from '@/ui/components/Keypad';
 import { BigNumber } from '@/ui/components/BigNumber';
 import { ActionButton } from '@/ui/components/ActionButton';
+import { useToast } from '@/ui/components/Toast';
 import { theme } from '@/ui/theme';
 import { validateMeasurement } from '@/domain/validators';
 import type { HypoSymptom, HypoTreatment } from '@/domain/types';
@@ -28,6 +29,7 @@ const TREATMENTS: { key: HypoTreatment; label: string }[] = [
 const HYPO_BG = '#fff5f5';
 
 export default function HypoScreen() {
+  const toast = useToast();
   const [value, setValue] = useState('');
   const [symptoms, setSymptoms] = useState<HypoSymptom[]>([]);
   const [treatment, setTreatment] = useState<HypoTreatment | null>(null);
@@ -39,51 +41,55 @@ export default function HypoScreen() {
 
   const submit = async () => {
     const v = parseInt(value, 10);
-    if (!validateMeasurement(v).ok) { Alert.alert('Valor inválido'); return; }
+    if (!validateMeasurement(v).ok) { toast.error('Valor inválido'); return; }
+    const measuredAt = Date.now();
     hypoRepo(getDbSync()).logHypo({
       valueMgdl: v,
-      measuredAt: Date.now(),
+      measuredAt,
       symptoms,
       treatment: treatment ?? undefined,
       treatmentGrams: treatment === 'sugar' ? 15 : undefined,
     });
-    await scheduleHypoFollowUp(Date.now());
-    Alert.alert('Salvo', 'Lembrete em 15 minutos pra remedir (regra dos 15).');
+    await silenceCoveredReminders(measuredAt);
+    await scheduleHypoFollowUp(measuredAt);
+    toast.success('Hipo salva. Lembrete em 15 min pra remedir.');
     router.replace('/');
   };
 
   return (
     <Screen title="Episódio de hipo" showBack bg={HYPO_BG}>
-      <Animated.View entering={FadeInDown.duration(400).springify().damping(18)} style={styles.heroCard}>
+      <View style={styles.heroCard}>
         <Text style={styles.heroLabel}>Glicemia atual</Text>
         <BigNumber value={numeric || '—'} color={theme.colors.danger} />
         <Text style={styles.heroHint}>Após salvar, lembrete em 15 minutos</Text>
-      </Animated.View>
+      </View>
 
-      <Animated.View entering={FadeInUp.duration(400).delay(80)}>
-        <Keypad value={value} onChange={setValue} onConfirm={() => {}} />
-      </Animated.View>
+      <Keypad value={value} onChange={setValue} onConfirm={() => {}} />
 
       <Text style={styles.section}>Sintomas</Text>
       <View style={styles.grid}>
-        {SYMPTOMS.map((s, i) => {
+        {SYMPTOMS.map((s) => {
           const sel = symptoms.includes(s.key);
           return (
-            <AnimatedChip key={s.key} entering={FadeInUp.duration(300).delay(140 + i * 30)}
-              selected={sel} onPress={() => { toggle(s.key); Haptics.selectionAsync().catch(() => {}); }}
-              label={s.label} />
+            <Pressable key={s.key}
+              onPress={() => { toggle(s.key); Haptics.selectionAsync().catch(() => {}); }}
+              style={[styles.chip, sel && styles.chipSel]}>
+              <Text style={[styles.chipTxt, sel && styles.chipTxtSel]}>{s.label}</Text>
+            </Pressable>
           );
         })}
       </View>
 
       <Text style={styles.section}>Tratamento</Text>
       <View style={styles.grid}>
-        {TREATMENTS.map((t, i) => {
+        {TREATMENTS.map((t) => {
           const sel = treatment === t.key;
           return (
-            <AnimatedChip key={t.key} entering={FadeInUp.duration(300).delay(220 + i * 30)}
-              selected={sel} onPress={() => { setTreatment(t.key); Haptics.selectionAsync().catch(() => {}); }}
-              label={t.label} />
+            <Pressable key={t.key}
+              onPress={() => { setTreatment(t.key); Haptics.selectionAsync().catch(() => {}); }}
+              style={[styles.chip, sel && styles.chipSel]}>
+              <Text style={[styles.chipTxt, sel && styles.chipTxtSel]}>{t.label}</Text>
+            </Pressable>
           );
         })}
       </View>
@@ -91,25 +97,6 @@ export default function HypoScreen() {
       <View style={{ height: theme.spacing.lg }} />
       <ActionButton label="Salvar e definir lembrete 15min" variant="danger" onPress={submit} />
     </Screen>
-  );
-}
-
-function AnimatedChip({
-  entering, selected, onPress, label,
-}: { entering: any; selected: boolean; onPress: () => void; label: string }) {
-  const scale = useSharedValue(1);
-  const animStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-  return (
-    <Animated.View entering={entering} style={animStyle}>
-      <Pressable
-        onPressIn={() => { scale.value = withTiming(0.95, { duration: 80 }); }}
-        onPressOut={() => { scale.value = withSpring(1, { damping: 10, stiffness: 200 }); }}
-        onPress={onPress}
-        style={[styles.chip, selected && styles.chipSel]}
-      >
-        <Text style={[styles.chipTxt, selected && styles.chipTxtSel]}>{label}</Text>
-      </Pressable>
-    </Animated.View>
   );
 }
 

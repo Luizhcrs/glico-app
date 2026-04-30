@@ -7,12 +7,25 @@
     "scheme": "glico",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f5f3ed"
+    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.luizhcrs.glico"
     },
     "android": {
-      "package": "com.luizhcrs.glico"
+      "package": "com.luizhcrs.glico",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#5a7a5a"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-router",

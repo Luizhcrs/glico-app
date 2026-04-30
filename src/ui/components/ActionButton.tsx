@@ -1,36 +1,32 @@
 // src/ui/components/ActionButton.tsx
 import React from 'react';
-import { Pressable, Text, StyleSheet } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { Pressable, Text, View, StyleSheet } from 'react-native';
+import { LucideIcon } from 'lucide-react-native';
 import { theme } from '@/ui/theme';
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
-export function ActionButton({
-  label, onPress, variant = 'primary', disabled,
-}: {
+interface Props {
   label: string;
   onPress: () => void;
   variant?: 'primary' | 'ghost' | 'danger';
   disabled?: boolean;
-}) {
-  const v = variants[variant];
-  const scale = useSharedValue(1);
-  const animStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  icon?: LucideIcon;
+}
 
+export function ActionButton({ label, onPress, variant = 'primary', disabled, icon: Icon }: Props) {
+  const v = variants[variant];
   return (
-    <AnimatedPressable
+    <Pressable
       onPress={disabled ? undefined : onPress}
-      onPressIn={() => { if (!disabled) scale.value = withSpring(0.96, { damping: 18, stiffness: 260 }); }}
-      onPressOut={() => { scale.value = withSpring(1, { damping: 14, stiffness: 220 }); }}
-      style={[
+      style={({ pressed }) => [
         styles.btn,
-        { backgroundColor: v.bg, opacity: disabled ? 0.5 : 1 },
-        animStyle,
+        { backgroundColor: v.bg, opacity: disabled ? 0.5 : pressed ? 0.85 : 1 },
       ]}
     >
-      <Text style={[styles.txt, { color: v.fg }]}>{label}</Text>
-    </AnimatedPressable>
+      <View style={styles.row}>
+        {Icon ? <Icon size={18} color={v.fg} strokeWidth={2.2} /> : null}
+        <Text style={[styles.txt, { color: v.fg }]}>{label}</Text>
+      </View>
+    </Pressable>
   );
 }
 
@@ -54,5 +50,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 2,
   },
-  txt: { fontSize: theme.fontSizes.md, fontWeight: '600', letterSpacing: 0.2 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  txt: {
+    fontSize: theme.fontSizes.md,
+    fontFamily: theme.fonts.semibold,
+    letterSpacing: 0.2,
+  },
 });

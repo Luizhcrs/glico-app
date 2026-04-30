@@ -1,7 +1,6 @@
 // app/trend.tsx
 import React, { useMemo, useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useSettings } from '@/ui/hooks/useSettings';
 import { useMeasurementsInRange } from '@/ui/hooks/useMeasurements';
 import { useStats } from '@/ui/hooks/useStats';
@@ -34,24 +33,22 @@ export default function TrendScreen() {
 
   return (
     <Screen title="Tendência" showBack>
-      <Animated.View entering={FadeIn.duration(300)} style={styles.tabs}>
+      <View style={styles.tabs}>
         {RANGES.map((r) => (
           <Pressable key={r.key} onPress={() => setRangeKey(r.key)}
             style={[styles.tab, rangeKey === r.key && styles.tabSel]}>
             <Text style={[styles.tabTxt, rangeKey === r.key && styles.tabTxtSel]}>{r.label}</Text>
           </Pressable>
         ))}
-      </Animated.View>
+      </View>
 
-      <Animated.View entering={FadeInDown.duration(450).delay(80).springify().damping(18)}>
-        <TrendChart data={data} targetLow={settings.targetLow} targetHigh={settings.targetHigh} />
-      </Animated.View>
+      <TrendChart data={data} targetLow={settings.targetLow} targetHigh={settings.targetHigh} />
 
-      <Animated.View entering={FadeInUp.duration(400).delay(160)} style={styles.statRow}>
+      <View style={styles.statRow}>
         <Stat label="TIR" value={`${stats.tirPct}%`} />
         <Stat label="Média" value={String(stats.meanMgdl)} />
         <Stat label="Hipos" value={String(stats.hypoCount)} />
-      </Animated.View>
+      </View>
 
       <Text style={styles.section}>Por janela do dia</Text>
       {[
@@ -59,10 +56,8 @@ export default function TrendScreen() {
         { label: 'Tarde (12–18)', mean: buckets.afternoon.mean, count: buckets.afternoon.count },
         { label: 'Noite (18–24)', mean: buckets.evening.mean, count: buckets.evening.count },
         { label: 'Madrugada (00–06)', mean: buckets.night.mean, count: buckets.night.count },
-      ].map((b, i) => (
-        <Animated.View key={b.label} entering={FadeInUp.duration(300).delay(240 + i * 50)}>
-          <Row label={b.label} value={b.mean} count={b.count} />
-        </Animated.View>
+      ].map((b) => (
+        <Row key={b.label} label={b.label} value={b.mean} count={b.count} />
       ))}
 
       <View style={{ height: theme.spacing.lg }} />

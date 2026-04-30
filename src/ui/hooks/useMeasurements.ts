@@ -15,9 +15,13 @@ export function useMeasurementsInRange(fromMs: number, toMs: number) {
 
 export function useLatestMeasurement() {
   const [data, setData] = useState<Measurement | null>(null);
+  const [previous, setPrevious] = useState<Measurement | null>(null);
   const reload = useCallback(() => {
-    setData(measurementRepo(getDbSync()).latest());
+    const repo = measurementRepo(getDbSync());
+    const latest = repo.latest();
+    setData(latest);
+    setPrevious(latest ? repo.previousBefore(latest.measuredAt) : null);
   }, []);
   useEffect(() => { reload(); }, [reload]);
-  return { data, reload };
+  return { data, previous, reload };
 }

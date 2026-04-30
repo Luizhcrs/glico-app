@@ -1,14 +1,19 @@
 // app/index.tsx
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
+import { ChevronRight, Plus, AlertOctagon, Syringe } from 'lucide-react-native';
 import { useLatestMeasurement, useMeasurementsInRange } from '@/ui/hooks/useMeasurements';
 import { useSettings } from '@/ui/hooks/useSettings';
+import { insulinRepo } from '@/domain/insulin';
+import { getDbSync } from '@/db/client';
 import { Screen } from '@/ui/components/Screen';
 import { BigNumber } from '@/ui/components/BigNumber';
 import { StatusPill, type Status } from '@/ui/components/StatusPill';
 import { ActionButton } from '@/ui/components/ActionButton';
+import { TrendArrow } from '@/ui/components/TrendArrow';
+import { MeasurementSheet } from '@/ui/components/MeasurementSheet';
+import { useToast } from '@/ui/components/Toast';
 import { theme } from '@/ui/theme';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -32,13 +37,34 @@ const CONTEXT_LABEL: Record<GlucoseContext, string> = {
 
 export default function HomeScreen() {
   const { data: settings } = useSettings();
-  const { data: latest } = useLatestMeasurement();
+  const { data: latest, previous, reload: reloadLatest } = useLatestMeasurement();
+  const toast = useToast();
+  const [sheetMeasurementId, setSheetMeasurementId] = useState<number | null>(null);
   const { startMs, endMs } = useMemo(() => {
     const start = new Date(); start.setHours(0, 0, 0, 0);
     const end = new Date(); end.setHours(23, 59, 59, 999);
     return { startMs: start.getTime(), endMs: end.getTime() };
   }, []);
-  const { data: today } = useMeasurementsInRange(startMs, endMs);
+  const { data: today, reload: reloadToday } = useMeasurementsInRange(startMs, endMs);
+
+  const reloadAll = () => { reloadLatest(); reloadToday(); };
+  const delta = latest && previous ? latest.valueMgdl - previous.valueMgdl : null;
+
+  const insulinByMeasurement = useMemo(() => {
+    const repo = insulinRepo(getDbSync());
+    const map = new Map<number, { basal: number; bolus: number }>();
+    for (const m of today) {
+      const linked = repo.listByMeasurement(m.id);
+      if (linked.length === 0) continue;
+      const acc = { basal: 0, bolus: 0 };
+      for (const d of linked) {
+        if (d.insulinType === 'basal') acc.basal += d.units;
+        else acc.bolus += d.units;
+      }
+      map.set(m.id, acc);
+    }
+    return map;
+  }, [today]);
 
   if (!settings) return null;
   const name = settings.displayName ?? '';
@@ -48,12 +74,12 @@ export default function HomeScreen() {
     <Screen
       rightAction={{ label: 'Perfil', onPress: () => router.push('/profile') }}
     >
-      <Animated.View entering={FadeIn.duration(350)} style={styles.greetWrap}>
+      <View style={styles.greetWrap}>
         <Text style={styles.greeting}>{greeting},</Text>
         <Text style={styles.greetingName}>{name || 'Olá'}</Text>
-      </Animated.View>
+      </View>
 
-      <Animated.View entering={FadeInDown.duration(450).delay(80).springify().damping(18)} style={styles.heroCard}>
+      <View style={styles.heroCard}>
         {latest ? (
           <>
             <Text style={styles.heroLabel}>
@@ -63,7 +89,10 @@ export default function HomeScreen() {
               value={latest.valueMgdl}
               color={latest.valueMgdl < settings.targetLow ? theme.colors.danger : undefined}
             />
-            <StatusPill status={statusFor(latest.valueMgdl, settings.targetLow, settings.targetHigh)} />
+            <View style={styles.heroPillRow}>
+              <StatusPill status={statusFor(latest.valueMgdl, settings.targetLow, settings.targetHigh)} />
+              <TrendArrow delta={delta} />
+            </View>
           </>
         ) : (
           <>
@@ -72,23 +101,23 @@ export default function HomeScreen() {
             <Text style={styles.empty}>Toque em "+ Medir" pra começar</Text>
           </>
         )}
-      </Animated.View>
+      </View>
 
-      <Animated.View entering={FadeInUp.duration(400).delay(160)} style={styles.actionsRow}>
+      <View style={styles.actionsRow}>
         <View style={{ flex: 1 }}>
-          <ActionButton label="+ Medir" onPress={() => router.push('/log')} />
+          <ActionButton label="Medir" icon={Plus} onPress={() => router.push('/log')} />
         </View>
         <View style={{ width: theme.spacing.sm }} />
         <View style={{ flex: 1 }}>
-          <ActionButton label="Hipo" variant="danger" onPress={() => router.push('/hypo')} />
+          <ActionButton label="Hipo" icon={AlertOctagon} variant="danger" onPress={() => router.push('/hypo')} />
         </View>
-      </Animated.View>
+      </View>
       <View style={{ height: theme.spacing.sm }} />
-      <ActionButton label="+ Insulina" variant="ghost" onPress={() => router.push('/insulin')} />
+      <ActionButton label="Insulina" icon={Syringe} variant="ghost" onPress={() => router.push('/insulin')} />
       <View style={{ height: theme.spacing.sm }} />
-      <Pressable onPress={() => router.push('/trend')} style={styles.linkRow}>
+      <Pressable onPress={() => router.push('/trend')} style={({ pressed }) => [styles.linkRow, pressed && { opacity: 0.7 }]}>
         <Text style={styles.linkLabel}>Ver tendência</Text>
-        <Text style={styles.linkArrow}>›</Text>
+        <ChevronRight size={18} color={theme.colors.accent} strokeWidth={2.2} />
       </Pressable>
 
       <Text style={styles.section}>Hoje</Text>
@@ -96,24 +125,45 @@ export default function HomeScreen() {
         <Text style={styles.subtle}>Sem medições hoje</Text>
       ) : (
         <View style={styles.list}>
-          {today.map((m, i) => {
+          {today.map((m) => {
             const status = statusFor(m.valueMgdl, settings.targetLow, settings.targetHigh);
             const valueColor =
               status === 'low' ? theme.colors.danger :
               status === 'high' ? theme.colors.warn :
               theme.colors.accent;
             return (
-              <Animated.View key={m.id} entering={FadeInUp.duration(300).delay(60 * i)} style={styles.row}>
+              <Pressable
+                key={m.id}
+                onPress={() => setSheetMeasurementId(m.id)}
+                style={({ pressed }) => [styles.row, pressed && { opacity: 0.6 }]}
+              >
                 <View style={{ flex: 1 }}>
                   <Text style={styles.rowTime}>{format(new Date(m.measuredAt), 'HH:mm')}</Text>
-                  <Text style={styles.rowCtx}>{CONTEXT_LABEL[m.context]}</Text>
+                  <Text style={styles.rowCtx}>
+                    {CONTEXT_LABEL[m.context]}
+                    {(() => {
+                      const ins = insulinByMeasurement.get(m.id);
+                      if (!ins) return '';
+                      const parts: string[] = [];
+                      if (ins.bolus > 0) parts.push(`${ins.bolus.toFixed(1)}u rápida`);
+                      if (ins.basal > 0) parts.push(`${ins.basal.toFixed(1)}u lenta`);
+                      return parts.length ? ` · ${parts.join(' + ')}` : '';
+                    })()}
+                    {m.note ? ' · com nota' : ''}
+                  </Text>
                 </View>
                 <Text style={[styles.rowValue, { color: valueColor }]}>{m.valueMgdl}</Text>
-              </Animated.View>
+              </Pressable>
             );
           })}
         </View>
       )}
+
+      <MeasurementSheet
+        measurementId={sheetMeasurementId}
+        onClose={() => setSheetMeasurementId(null)}
+        onChanged={reloadAll}
+      />
     </Screen>
   );
 }
@@ -127,8 +177,8 @@ function greetingFor(d: Date): string {
 
 const styles = StyleSheet.create({
   greetWrap: { marginBottom: theme.spacing.lg },
-  greeting: { fontSize: theme.fontSizes.md, color: theme.colors.textMuted, fontWeight: '500' },
-  greetingName: { fontSize: 28, fontWeight: '700', color: theme.colors.text, letterSpacing: -0.5 },
+  greeting: { fontSize: theme.fontSizes.md, color: theme.colors.textMuted, fontFamily: theme.fonts.medium },
+  greetingName: { fontSize: 28, fontFamily: theme.fonts.bold, color: theme.colors.text, letterSpacing: -0.5 },
   heroCard: {
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radii.lg,
@@ -148,9 +198,10 @@ const styles = StyleSheet.create({
     color: theme.colors.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 0.6,
-    fontWeight: '600',
+    fontFamily: theme.fonts.semibold,
   },
-  empty: { color: theme.colors.textMuted, fontSize: theme.fontSizes.sm, marginTop: theme.spacing.xs },
+  heroPillRow: { flexDirection: 'row', alignItems: 'center', gap: 8, justifyContent: 'center' },
+  empty: { color: theme.colors.textMuted, fontSize: theme.fontSizes.sm, fontFamily: theme.fonts.regular, marginTop: theme.spacing.xs },
   actionsRow: { flexDirection: 'row' },
   linkRow: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
@@ -158,15 +209,14 @@ const styles = StyleSheet.create({
     borderRadius: theme.radii.md, backgroundColor: theme.colors.surface,
     borderWidth: 1, borderColor: theme.colors.border,
   },
-  linkLabel: { color: theme.colors.text, fontSize: theme.fontSizes.sm, fontWeight: '600' },
-  linkArrow: { color: theme.colors.accent, fontSize: 20, fontWeight: '300' },
+  linkLabel: { color: theme.colors.text, fontSize: theme.fontSizes.sm, fontFamily: theme.fonts.semibold },
   subtle: {
-    color: theme.colors.textMuted, fontSize: theme.fontSizes.sm,
+    color: theme.colors.textMuted, fontSize: theme.fontSizes.sm, fontFamily: theme.fonts.regular,
     textAlign: 'center', paddingVertical: theme.spacing.md,
   },
   section: {
     marginTop: theme.spacing.xl, marginBottom: theme.spacing.sm,
-    fontSize: theme.fontSizes.xs, fontWeight: '700',
+    fontSize: theme.fontSizes.xs, fontFamily: theme.fonts.bold,
     color: theme.colors.textMuted, textTransform: 'uppercase', letterSpacing: 0.8,
   },
   list: {
@@ -179,7 +229,7 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.md, paddingHorizontal: theme.spacing.md,
     borderBottomWidth: StyleSheet.hairlineWidth, borderColor: theme.colors.border,
   },
-  rowTime: { color: theme.colors.text, fontSize: theme.fontSizes.md, fontWeight: '600' },
-  rowCtx: { color: theme.colors.textMuted, fontSize: theme.fontSizes.xs },
-  rowValue: { fontSize: theme.fontSizes.lg, fontWeight: '700' },
+  rowTime: { color: theme.colors.text, fontSize: theme.fontSizes.md, fontFamily: theme.fonts.semibold },
+  rowCtx: { color: theme.colors.textMuted, fontSize: theme.fontSizes.xs, fontFamily: theme.fonts.regular },
+  rowValue: { fontSize: theme.fontSizes.lg, fontFamily: theme.fonts.bold, fontVariant: ['tabular-nums'] },
 });

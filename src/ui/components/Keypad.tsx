@@ -1,35 +1,17 @@
 // src/ui/components/Keypad.tsx
 import React from 'react';
 import { View, Pressable, Text, StyleSheet } from 'react-native';
-import * as Haptics from 'expo-haptics';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { Delete, Check } from 'lucide-react-native';
 import { theme } from '@/ui/theme';
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+type KeyValue = { kind: 'digit'; v: string } | { kind: 'delete' } | { kind: 'confirm' };
 
-interface KeyProps {
-  k: string;
-  onPress: (k: string) => void;
-}
-
-function Key({ k, onPress }: KeyProps) {
-  const scale = useSharedValue(1);
-  const animStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-  const isAction = k === '✓' || k === '⌫';
-  return (
-    <AnimatedPressable
-      style={[styles.key, isAction && styles.keyAction, animStyle]}
-      onPressIn={() => {
-        scale.value = withSpring(0.92, { damping: 15, stiffness: 360 });
-        Haptics.selectionAsync().catch(() => {});
-      }}
-      onPressOut={() => { scale.value = withSpring(1, { damping: 12, stiffness: 200 }); }}
-      onPress={() => onPress(k)}
-    >
-      <Text style={[styles.txt, isAction && styles.txtAction]}>{k}</Text>
-    </AnimatedPressable>
-  );
-}
+const KEYS: KeyValue[] = [
+  { kind: 'digit', v: '1' }, { kind: 'digit', v: '2' }, { kind: 'digit', v: '3' },
+  { kind: 'digit', v: '4' }, { kind: 'digit', v: '5' }, { kind: 'digit', v: '6' },
+  { kind: 'digit', v: '7' }, { kind: 'digit', v: '8' }, { kind: 'digit', v: '9' },
+  { kind: 'delete' }, { kind: 'digit', v: '0' }, { kind: 'confirm' },
+];
 
 export function Keypad({
   value, onChange, onConfirm, maxLength = 3,
@@ -39,16 +21,37 @@ export function Keypad({
   onConfirm: () => void;
   maxLength?: number;
 }) {
-  const press = (k: string) => {
-    if (k === '⌫') return onChange(value.slice(0, -1));
-    if (k === '✓') return onConfirm();
+  const press = (k: KeyValue) => {
+    if (k.kind === 'delete') return onChange(value.slice(0, -1));
+    if (k.kind === 'confirm') return onConfirm();
     if (value.length >= maxLength) return;
-    onChange(value + k);
+    onChange(value + k.v);
   };
-  const keys = ['1','2','3','4','5','6','7','8','9','⌫','0','✓'];
+
   return (
     <View style={styles.grid}>
-      {keys.map((k) => <Key key={k} k={k} onPress={press} />)}
+      {KEYS.map((k, i) => {
+        const isAction = k.kind !== 'digit';
+        return (
+          <Pressable
+            key={i}
+            onPress={() => press(k)}
+            style={({ pressed }) => [
+              styles.key,
+              isAction && styles.keyAction,
+              pressed && styles.keyPressed,
+            ]}
+          >
+            {k.kind === 'digit' ? (
+              <Text style={styles.txt}>{k.v}</Text>
+            ) : k.kind === 'delete' ? (
+              <Delete size={22} color={theme.colors.accent} strokeWidth={2} />
+            ) : (
+              <Check size={22} color={theme.colors.accent} strokeWidth={2.4} />
+            )}
+          </Pressable>
+        );
+      })}
     </View>
   );
 }
@@ -61,10 +64,12 @@ const styles = StyleSheet.create({
     borderRadius: theme.radii.md,
     backgroundColor: theme.colors.surface,
     alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: theme.colors.border,
+    minHeight: 56,
   },
   keyAction: { backgroundColor: theme.colors.cardBg },
-  txt: { fontSize: theme.fontSizes.xl, fontWeight: '500', color: theme.colors.text },
-  txtAction: { color: theme.colors.accent, fontWeight: '600' },
+  keyPressed: { opacity: 0.6 },
+  txt: { fontSize: theme.fontSizes.xl, fontFamily: theme.fonts.medium, color: theme.colors.text },
 });

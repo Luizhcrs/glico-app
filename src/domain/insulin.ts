@@ -64,5 +64,39 @@ export function insulinRepo(db: DbLike) {
       );
       return rows.map(toDomain);
     },
+    lastBrandFor(type: InsulinType): string | null {
+      const r = db.get<{ insulin_brand: string | null }>(
+        `SELECT insulin_brand FROM insulin_dose
+         WHERE deleted_at IS NULL AND insulin_type = ? AND insulin_brand IS NOT NULL
+         ORDER BY taken_at DESC LIMIT 1`,
+        [type],
+      );
+      return r?.insulin_brand ?? null;
+    },
+    listByMeasurement(measurementId: number): InsulinDose[] {
+      const rows = db.all<DbRow>(
+        `SELECT * FROM insulin_dose
+         WHERE deleted_at IS NULL AND measurement_id = ?
+         ORDER BY taken_at ASC`,
+        [measurementId],
+      );
+      return rows.map(toDomain);
+    },
+    averagePerDay(days: number, type: InsulinType): { totalUnits: number; doseCount: number; avgPerDay: number } {
+      const fromMs = Date.now() - days * 24 * 3600_000;
+      const r = db.get<{ total: number | null; count: number }>(
+        `SELECT SUM(units) AS total, COUNT(*) AS count
+         FROM insulin_dose
+         WHERE deleted_at IS NULL AND insulin_type = ? AND taken_at >= ?`,
+        [type, fromMs],
+      );
+      const total = r?.total ?? 0;
+      const count = r?.count ?? 0;
+      return {
+        totalUnits: total,
+        doseCount: count,
+        avgPerDay: days > 0 ? Math.round((total / days) * 10) / 10 : 0,
+      };
+    },
   };
 }
