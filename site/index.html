@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Glico — Registro de glicemia para diabetes tipo 1</title>
+<meta name="description" content="Aplicativo Android single-user para registro de glicemia capilar, doses de insulina e episódios de hipoglicemia. Offline, dados locais, sem servidor." />
+<meta name="theme-color" content="#5a7a5a" />
+<link rel="icon" href="icon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<meta property="og:title" content="Glico" />
+<meta property="og:description" content="Registro de glicemia simples e privado para diabetes tipo 1." />
+<meta property="og:image" content="screenshots/01-home.png" />
+<meta property="og:type" content="website" />
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#top">
+      <span class="logo">
+        <svg width="28" height="28" viewBox="0 0 1024 1024" aria-hidden="true">
+          <defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6b8c6b"/><stop offset="100%" stop-color="#4f6e4f"/></linearGradient></defs>
+          <rect width="1024" height="1024" rx="232" fill="url(#lg)"/>
+          <path d="M758 240C758 196 720 158 720 158C720 158 682 196 682 196C682 244 720 282 720 282C720 282 758 244 758 240Z" fill="#f5f3ed" opacity="0.92"/>
+          <text x="512" y="640" font-family="Plus Jakarta Sans, sans-serif" font-size="560" font-weight="200" fill="#f5f3ed" text-anchor="middle" letter-spacing="-26">g</text>
+        </svg>
+      </span>
+      <span class="brand-name">Glico</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#telas">Telas</a>
+      <a href="#features">Recursos</a>
+      <a href="#privacidade">Privacidade</a>
+      <a href="https://github.com/Luizhcrs/glico-app" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/Luizhcrs/glico-app/releases/latest" class="cta-small">Baixar APK</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <span class="eyebrow">v0.1.0 · Android</span>
+      <h1>Registro de glicemia.<br/>Simples, privado, no seu ritmo.</h1>
+      <p class="lead">
+        Glico é um aplicativo offline-first para diabetes tipo 1.
+        Registre medições em dois toques, acompanhe sua tendência,
+        compartilhe um relatório claro com seu médico — sem que seus dados saiam do celular.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://github.com/Luizhcrs/glico-app/releases/latest">
+          Baixar APK v0.1.0
+        </a>
+        <a class="btn btn-ghost" href="#telas">Ver telas</a>
+      </div>
+      <ul class="bullets">
+        <li>Offline-first — funciona sem internet</li>
+        <li>Sem login, sem servidor, sem analytics</li>
+        <li>Lembretes inteligentes que silenciam quando você já mediu</li>
+      </ul>
+    </div>
+    <div class="hero-art">
+      <img src="screenshots/01-home.png" alt="Tela inicial do Glico" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<section id="telas" class="screens">
+  <div class="container">
+    <h2>Telas do aplicativo</h2>
+    <p class="section-lead">UI Sage Calm: verde sálvia, bege quente, tipografia leve.</p>
+    <div class="screens-grid">
+      <figure><img src="screenshots/06-welcome.png" alt="Boas-vindas" loading="lazy"/><figcaption>Boas-vindas</figcaption></figure>
+      <figure><img src="screenshots/01-home.png" alt="Home" loading="lazy"/><figcaption>Home</figcaption></figure>
+      <figure><img src="screenshots/02-log.png" alt="Logar medição" loading="lazy"/><figcaption>Logar medição</figcaption></figure>
+      <figure><img src="screenshots/03-hypo.png" alt="Hipoglicemia" loading="lazy"/><figcaption>Hipoglicemia</figcaption></figure>
+      <figure><img src="screenshots/04-trend.png" alt="Tendência" loading="lazy"/><figcaption>Tendência</figcaption></figure>
+      <figure><img src="screenshots/05-profile.png" alt="Perfil" loading="lazy"/><figcaption>Perfil</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="features">
+  <div class="container">
+    <h2>Pensado para uso diário</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        </div>
+        <h3>Dois toques pra registrar</h3>
+        <p>Keypad customizado, contexto pré-selecionado pelo lembrete que abriu a tela. Sem teclado nativo lento.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        </div>
+        <h3>Lembretes inteligentes</h3>
+        <p>Os lembretes silenciam automaticamente se você já mediu na janela próxima. Em segundo plano e em primeiro plano.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
+        </div>
+        <h3>Tendência e TIR</h3>
+        <p>Gráfico com sua faixa alvo, tempo no alvo, média e variabilidade. Quebrado por janela do dia.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2l4 4-3 3-4-4z"/><path d="M19 9L8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/></svg>
+        </div>
+        <h3>Insulina rápida e lenta</h3>
+        <p>Termos do dia a dia primeiro: rápida (bolus) e lenta (basal). Marcas comuns no Brasil em chips, com sua última escolha lembrada.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Hipoglicemia bem cuidada</h3>
+        <p>Botão dedicado, lembrete automático em 15 minutos para remedir. Registro de sintomas e tratamento.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <h3>Relatório PDF para o médico</h3>
+        <p>Exporta últimos 14 ou 30 dias com tabela, gráfico e episódios de hipo. Pronto para imprimir ou enviar por mensagem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="privacidade" class="privacy">
+  <div class="container privacy-inner">
+    <div class="privacy-text">
+      <h2>Seus dados nunca saem do seu celular</h2>
+      <p>Glico é offline-first por construção. Nenhuma medição, dose ou nota é enviada para qualquer servidor. Não há contas, login, telemetria ou crash reporting.</p>
+      <ul>
+        <li>Backup opcional em arquivo <code>.json</code> cifrado com AES-256-GCM e PBKDF2-SHA256.</li>
+        <li>Bloqueio do app por PIN guardado no Keystore Android.</li>
+        <li>Reset total disponível a qualquer momento.</li>
+      </ul>
+    </div>
+    <div class="privacy-note">
+      <p><strong>Glico não é um dispositivo médico.</strong> Não diagnostica, não calcula doses, não substitui orientação clínica. Em emergências, procure atendimento profissional.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <span class="logo small">
+        <svg width="22" height="22" viewBox="0 0 1024 1024" aria-hidden="true">
+          <defs><linearGradient id="lg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6b8c6b"/><stop offset="100%" stop-color="#4f6e4f"/></linearGradient></defs>
+          <rect width="1024" height="1024" rx="232" fill="url(#lg2)"/>
+          <text x="512" y="640" font-family="Plus Jakarta Sans, sans-serif" font-size="560" font-weight="200" fill="#f5f3ed" text-anchor="middle" letter-spacing="-26">g</text>
+        </svg>
+      </span>
+      <span>Glico · v0.1.0</span>
+    </div>
+    <nav>
+      <a href="https://github.com/Luizhcrs/glico-app">Repositório</a>
+      <a href="https://github.com/Luizhcrs/glico-app/releases">Releases</a>
+      <a href="https://github.com/Luizhcrs/glico-app/blob/main/LICENSE">Licença</a>
+      <a href="https://github.com/Luizhcrs/glico-app/blob/main/SECURITY.md">Segurança</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
