@@ -6,6 +6,18 @@ Offline-first. Dados ficam no aparelho. Sem login, sem servidor, sem analytics.
 
 [Baixar APK v0.1.0](https://github.com/Luizhcrs/glico-app/releases/latest) · [Documentação](#documentação) · [Licença](LICENSE)
 
+## Telas
+
+| Bem-vinda | Home | Logar |
+|---|---|---|
+| ![](screenshots/06-welcome.png) | ![](screenshots/01-home.png) | ![](screenshots/02-log.png) |
+
+| Hipoglicemia | Tendência | Perfil |
+|---|---|---|
+| ![](screenshots/03-hypo.png) | ![](screenshots/04-trend.png) | ![](screenshots/05-profile.png) |
+
+> Mockups visuais geradas a partir dos tokens reais de `theme.ts` via puppeteer. Reflete a UI do app instalado.
+
 ---
 
 ## Stack

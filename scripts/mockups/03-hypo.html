@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<title>Glico — Hipo</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="common.css" />
+<style>
+  body { background: #fff5f5; }
+</style>
+</head>
+<body>
+  <div class="statusbar">
+    <span>17:32</span>
+    <div class="right">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M2 8L12 2L22 8M2 8V22H22V8M2 8L12 14L22 8" stroke="currentColor" stroke-width="2"/></svg>
+      <span>71</span>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div class="header">
+      <div class="back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="26" height="26"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <div class="title">Episódio de hipo</div>
+      <div></div>
+    </div>
+
+    <div class="hero" style="background: #fff;">
+      <div class="hero-label" style="color: var(--danger);">Glicemia atual</div>
+      <div class="hero-num-row">
+        <div class="hero-num" style="color: var(--danger)">58</div>
+        <div class="hero-unit">mg/dL</div>
+      </div>
+      <div style="font-size: 11px; color: var(--textMuted); margin-top: 4px;">Após salvar, lembrete em 15 minutos</div>
+    </div>
+
+    <div class="label-up">Sintomas</div>
+    <div class="chip-row">
+      <div class="chip chip-sel-danger">Tremor</div>
+      <div class="chip chip-sel-danger">Suor</div>
+      <div class="chip">Tontura</div>
+      <div class="chip">Fome</div>
+      <div class="chip">Confusão</div>
+      <div class="chip">Irritabilidade</div>
+    </div>
+
+    <div class="label-up">Tratamento</div>
+    <div class="chip-row">
+      <div class="chip chip-sel-danger">Açúcar 15g</div>
+      <div class="chip">Suco</div>
+      <div class="chip">Comida</div>
+      <div class="chip">Glucagon</div>
+      <div class="chip">Outro</div>
+    </div>
+
+    <div class="btn btn-danger" style="margin-top: 16px;">Salvar e definir lembrete 15min</div>
+  </div>
+</body>
+</html>
