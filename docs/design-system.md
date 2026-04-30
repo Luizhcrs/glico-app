@@ -313,7 +313,7 @@ Pacote: `lucide-react-native`
 | Outlier | "Tem certeza desse valor? X mg/dL é incomum" |
 | Toast sucesso | "Medição salva: 142 mg/dL" |
 | Toast erro | "Valor inválido: deve estar entre 20 e 600" |
-| Greeting | "Bom dia, Maria" / "Boa tarde, Maria" / "Boa noite, Maria" |
+| Greeting | "Bom dia, Erica" / "Boa tarde, Erica" / "Boa noite, Erica" |
 | Tendência relativa | "há 2 horas" (date-fns ptBR formatDistanceToNow) |
 | Hint clínico | "Lembrete em 15 min pra remedir" |
 | Privacy nota | "Seus dados nunca saem do seu celular." |

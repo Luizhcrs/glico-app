@@ -184,7 +184,7 @@ Decisões completas em `docs/superpowers/specs/2026-04-29-glico-fast-logger-desi
 
 ## Roadmap
 
-### v0.1 (atual — em uso pela Maria)
+### v0.1 (atual — em uso pela Erica)
 Tudo da seção "Funcionalidades atuais".
 
 ### v0.2
@@ -268,6 +268,6 @@ Se freezar: shake phone → "Reload". Se persistir: force-close + reabrir. Se pe
 
 ## Quem é o usuário?
 
-**Maria.** Esposa do Luiz. Diabetes tipo 1 desde 2018. Caneta MDI. Não-tech. Mede 4-6x/dia. Usa Basaglar (lenta) e Fiasp (rápida).
+**Erica.** Esposa do Luiz. Diabetes tipo 1 desde 2018. Caneta MDI. Não-tech. Mede 4-6x/dia. Usa Basaglar (lenta) e Fiasp (rápida).
 
 Toda decisão de UX é pra ela. Sem nerdices, sem dashboard hospitalar, sem gamificação infantil.

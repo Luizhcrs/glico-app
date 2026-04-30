@@ -9,7 +9,7 @@ labels: feature
 <!-- Descreva a feature em 1-2 linhas. -->
 
 ## Por quê
-<!-- Que dor resolve? Comportamento atual da Maria que melhoraria. -->
+<!-- Que dor resolve? Comportamento atual da Erica que melhoraria. -->
 
 ## Mockup / referência
 <!-- Screenshot de outro app, sketch, ou descrição visual. -->
