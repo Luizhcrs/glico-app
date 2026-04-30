@@ -25,3 +25,6 @@ android/app/build/
 
 expo-env.d.ts
 # @end expo-cli
+
+# UX/UI strategy + design system docs — ficam local, não vão pro repo público
+docs/

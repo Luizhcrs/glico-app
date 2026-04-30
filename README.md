@@ -19,7 +19,7 @@ npm install --legacy-peer-deps
 CI=1 EXPO_PACKAGER_HOSTNAME=<ip-do-pc> npx expo start --dev-client --port 8082
 ```
 
-Pré-requisitos: Node 20, Android dev-client APK ([build via EAS](docs/design-system.md#11-app-config--nativo)).
+Pré-requisitos: Node 20, Android dev-client APK (build via EAS).
 
 ## Build APK
 
@@ -42,9 +42,6 @@ npx jest
 | [`CHANGELOG.md`](CHANGELOG.md) | Versões e mudanças |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Workflow de mudança e padrões |
 | [`SECURITY.md`](SECURITY.md) | Política de segurança e modelo de ameaça |
-| [`docs/design-system.md`](docs/design-system.md) | Identidade visual, tokens, componentes |
-| [`docs/ux-references-2026-04-30.md`](docs/ux-references-2026-04-30.md) | Referências de UX consultadas |
-| [`docs/superpowers/specs/`](docs/superpowers/specs/) | Especificação original |
 
 ## Estrutura
 
@@ -58,7 +55,6 @@ src/
   pdf/
   ui/        # theme, components, hooks
 assets/      # ícones, splash, branding SVGs
-docs/        # documentação
 tests/       # unit, integration, e2e
 ```
 
