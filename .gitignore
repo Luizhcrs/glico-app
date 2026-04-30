@@ -28,3 +28,5 @@ expo-env.d.ts
 
 # UX/UI strategy + design system docs — ficam local, não vão pro repo público
 docs/
+scripts/mockups/
+scripts/generate-screenshots.mjs

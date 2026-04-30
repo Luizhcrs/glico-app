@@ -16,8 +16,6 @@ Offline-first. Dados ficam no aparelho. Sem login, sem servidor, sem analytics.
 |---|---|---|
 | ![](screenshots/03-hypo.png) | ![](screenshots/04-trend.png) | ![](screenshots/05-profile.png) |
 
-> Mockups visuais geradas a partir dos tokens reais de `theme.ts` via puppeteer. Reflete a UI do app instalado.
-
 ---
 
 ## Stack
